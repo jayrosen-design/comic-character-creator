@@ -12,6 +12,7 @@ const useCharacterGenerator = () => {
     action: "",
   });
   
+  // Initialize API key from session storage if available
   const [apiKey, setApiKey] = useState<string>(() => {
     return sessionStorage.getItem("openai_api_key") || "";
   });
