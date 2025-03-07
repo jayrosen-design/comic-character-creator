@@ -53,30 +53,51 @@ export const generateCharacterImage = async (
   }
 
   const { artStyle, characterType, theme, background, backgroundColor, action } = formData;
+  
+  // Build the prompt from individual conditional parts
+  const promptParts: string[] = [];
 
-  // Get the art style-specific prompt
-  const artStylePrompt = artStyle ? ART_STYLE_PROMPTS[artStyle] : "";
-
-  // Compose the background description
-  let backgroundDescription = "";
-  if (background === "Solid White") {
-    backgroundDescription = "a plain white background";
-  } else if (background === "Solid Color") {
-    backgroundDescription = `a solid ${COLOR_NAME_MAP[backgroundColor] || backgroundColor} background`;
-  } else {
-    backgroundDescription = background;
+  // 1. Art style-specific prompt (if available)
+  if (artStyle && ART_STYLE_PROMPTS[artStyle]) {
+    promptParts.push(ART_STYLE_PROMPTS[artStyle]);
   }
 
-  // Compose the prompt using user selections and style-specific prompt
-  const prompt = `
-    ${artStylePrompt}
-    
-    A full-body, uncropped ${characterType} in a ${theme} setting performing ${action} with ${backgroundDescription}. 
-    Ensure that only one character is depicted and that the entire character is clearly visible without any cropping.
-    ${background === "Solid White" ? "For a solid white background, generate a pure character illustration with no additional background elements." : ""}
-    
-    ${SAFETY_PRE_PROMPT}
-  `;
+  // 2. Character description with setting and action
+  promptParts.push(
+    `A full-body, uncropped ${characterType} in a ${theme} setting performing ${action}.`
+  );
+
+  // 3. Background description (handle Solid White and Solid Color)
+  let backgroundDescription = "";
+  if (background === "Solid White") {
+    backgroundDescription = "on a plain white background";
+  } else if (background === "Solid Color") {
+    backgroundDescription = `on a solid ${COLOR_NAME_MAP[backgroundColor] || backgroundColor} background`;
+  } else {
+    backgroundDescription = `with a background of ${background}`;
+  }
+  promptParts.push(backgroundDescription + ".");
+
+  // 4. Ensure one complete character is depicted
+  promptParts.push(
+    "Ensure that only one character is depicted and the entire character is clearly visible without any cropping."
+  );
+  
+  // 5. Specific instruction for solid white background
+  if (background === "Solid White") {
+    promptParts.push(
+      "For a solid white background, generate a pure character illustration with no additional background elements."
+    );
+  }
+  
+  // 6. Exclude weapons or harmful objects
+  promptParts.push("Do not include any weapons, guns, or harmful objects in the illustration.");
+  
+  // 7. Append the safety pre-prompt
+  promptParts.push(SAFETY_PRE_PROMPT.trim());
+
+  // Join all parts into the final prompt string
+  const prompt = promptParts.join(" ");
 
   try {
     const response = await fetch(OPENAI_API_URL, {
@@ -106,10 +127,10 @@ export const generateCharacterImage = async (
   } catch (error) {
     console.error("Error generating character:", error);
     let errorMessage = "Failed to generate character image";
-    
+
     if (error instanceof Error) {
       errorMessage = error.message;
-      
+
       // Handle specific API errors
       if (errorMessage.includes("Unauthorized")) {
         errorMessage = "Invalid API key. Please check your OpenAI API key.";
