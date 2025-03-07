@@ -8,10 +8,11 @@ interface ImageDisplayProps {
   imageUrl: string | null;
   onRegenerate: () => void;
   isLoading: boolean;
+  isSavingImage?: boolean;
   className?: string;
 }
 
-const ImageDisplay = ({ imageUrl, onRegenerate, isLoading, className }: ImageDisplayProps) => {
+const ImageDisplay = ({ imageUrl, onRegenerate, isLoading, isSavingImage = false, className }: ImageDisplayProps) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
 
   // Reset loading state when imageUrl changes
@@ -69,21 +70,30 @@ const ImageDisplay = ({ imageUrl, onRegenerate, isLoading, className }: ImageDis
 
       {!isLoading && imageUrl && (
         <div className="flex justify-center mt-6 space-x-4 animate-fade-up">
-          <Button
-            onClick={onRegenerate}
-            variant="outline"
-            className="rounded-xl px-6 py-5 bg-white shadow-sm border-primary/20 hover:bg-primary/5 button-bounce"
-          >
-            <RefreshCw className="mr-2 h-4 w-4" />
-            Create New Character
-          </Button>
-          <Button
-            onClick={handleDownload}
-            className="rounded-xl px-6 py-5 bg-primary hover:bg-primary/90 text-white shadow-md button-bounce"
-          >
-            <Download className="mr-2 h-4 w-4" />
-            Download Image
-          </Button>
+          {isSavingImage ? (
+            <div className="text-center py-2">
+              <div className="inline-block w-5 h-5 border-2 border-primary/30 border-t-primary rounded-full animate-spin mr-2"></div>
+              <span className="text-muted-foreground">Saving to gallery...</span>
+            </div>
+          ) : (
+            <>
+              <Button
+                onClick={onRegenerate}
+                variant="outline"
+                className="rounded-xl px-6 py-5 bg-white shadow-sm border-primary/20 hover:bg-primary/5 button-bounce"
+              >
+                <RefreshCw className="mr-2 h-4 w-4" />
+                Create New Character
+              </Button>
+              <Button
+                onClick={handleDownload}
+                className="rounded-xl px-6 py-5 bg-primary hover:bg-primary/90 text-white shadow-md button-bounce"
+              >
+                <Download className="mr-2 h-4 w-4" />
+                Download Image
+              </Button>
+            </>
+          )}
         </div>
       )}
     </div>

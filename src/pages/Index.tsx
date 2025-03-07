@@ -14,6 +14,7 @@ const Index = () => {
     apiKey,
     imageUrl,
     isLoading,
+    isSavingImage,
     error,
     galleryImages,
     updateFormField,
@@ -93,6 +94,7 @@ const Index = () => {
                 imageUrl={imageUrl}
                 onRegenerate={resetImage}
                 isLoading={isLoading}
+                isSavingImage={isSavingImage}
               />
             </section>
           )}

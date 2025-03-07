@@ -22,12 +22,15 @@ export const loadStoredImages = (): StoredImage[] => {
 };
 
 // Save a new image to localStorage
-export const saveImage = (url: string, settings: CharacterFormData): StoredImage => {
+export const saveImage = async (url: string, settings: CharacterFormData): Promise<StoredImage> => {
   try {
+    // Upload the image to ImgBB
+    const permanentUrl = await uploadToImgBB(url);
+    
     const images = loadStoredImages();
     const newImage: StoredImage = {
       id: crypto.randomUUID(), // Generate unique ID
-      url,
+      url: permanentUrl,
       createdAt: Date.now(),
       settings,
     };
@@ -42,5 +45,44 @@ export const saveImage = (url: string, settings: CharacterFormData): StoredImage
   } catch (error) {
     console.error("Error saving image to storage:", error);
     throw error;
+  }
+};
+
+// Upload image to ImgBB
+const uploadToImgBB = async (imageUrl: string): Promise<string> => {
+  try {
+    // First, fetch the image as a blob
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+      throw new Error('Failed to fetch image from OpenAI');
+    }
+    
+    const blob = await response.blob();
+    
+    // Create form data for upload
+    const formData = new FormData();
+    formData.append('image', blob);
+    
+    // Free ImgBB API key (this is a public demo key that can be included in client-side code)
+    const apiKey = '6d207e02198a847aa98d0a2a901485a5';
+    
+    // Upload to ImgBB
+    const uploadResponse = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!uploadResponse.ok) {
+      throw new Error('Failed to upload image to ImgBB');
+    }
+    
+    const data = await uploadResponse.json();
+    
+    // Return the permanent URL
+    return data.data.url;
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    // If upload fails, return the original URL as fallback
+    return imageUrl;
   }
 };

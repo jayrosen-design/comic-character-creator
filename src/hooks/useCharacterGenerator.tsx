@@ -22,6 +22,7 @@ const useCharacterGenerator = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [galleryImages, setGalleryImages] = useState<StoredImage[]>([]);
+  const [isSavingImage, setIsSavingImage] = useState<boolean>(false);
 
   // Load stored images on initial render
   useEffect(() => {
@@ -69,22 +70,28 @@ const useCharacterGenerator = () => {
     setError(null);
 
     try {
-      const imageUrl = await generateCharacterImage(formData, apiKey);
-      setImageUrl(imageUrl);
+      const generatedImageUrl = await generateCharacterImage(formData, apiKey);
+      setImageUrl(generatedImageUrl);
       
-      // Save the image to storage
-      const newImage = saveImage(imageUrl, { ...formData });
+      // Show toast for uploading
+      toast.info("Saving image to gallery...");
+      setIsSavingImage(true);
+      
+      // Save the image to storage (this now includes uploading to ImgBB)
+      const newImage = await saveImage(generatedImageUrl, { ...formData });
       
       // Update gallery images
       setGalleryImages(prev => [newImage, ...prev]);
       
-      toast.success("Character created successfully!");
+      toast.success("Character created and saved to gallery!");
+      setIsSavingImage(false);
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);
       } else {
         setError("An unknown error occurred");
       }
+      setIsSavingImage(false);
     } finally {
       setIsLoading(false);
     }
@@ -107,6 +114,7 @@ const useCharacterGenerator = () => {
     apiKey,
     imageUrl,
     isLoading,
+    isSavingImage,
     error,
     galleryImages,
     updateFormField,
