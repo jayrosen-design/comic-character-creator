@@ -71,7 +71,9 @@ export const generateCharacterImage = async (
   const prompt = `
     ${artStylePrompt}
     
-    A ${characterType} in a ${theme} themed setting with ${backgroundDescription}, ${action}. 
+    A full-body, uncropped ${characterType} in a ${theme} setting performing ${action} with ${backgroundDescription}. 
+    Ensure that only one character is depicted and that the entire character is clearly visible without any cropping.
+    ${background === "Solid White" ? "For a solid white background, generate a pure character illustration with no additional background elements." : ""}
     
     ${SAFETY_PRE_PROMPT}
   `;
