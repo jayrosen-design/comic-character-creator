@@ -44,8 +44,9 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    /* Remove the previous background in favor of the more detailed one in the Index component */
-    background-image: none;
+    background-image: 
+      radial-gradient(at 80% 10%, hsla(250, 95%, 76%, 0.05) 0px, transparent 50%),
+      radial-gradient(at 20% 90%, hsla(221, 83%, 53%, 0.05) 0px, transparent 50%);
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -71,7 +72,7 @@
 
 @layer components {
   .glass-card {
-    @apply bg-white/90 backdrop-blur-sm border border-white/50 shadow-sm rounded-2xl;
+    @apply bg-white/80 backdrop-blur-sm border border-white/50 shadow-sm rounded-2xl;
   }
   
   .button-bounce {
