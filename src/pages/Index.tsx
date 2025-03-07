@@ -1,8 +1,7 @@
-
 import { useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ApiKeyInput from "@/components/ApiKeyInput";
+import ApiKeyModal from "@/components/ApiKeyModal";
 import CharacterForm from "@/components/CharacterForm";
 import ImageDisplay from "@/components/ImageDisplay";
 import Gallery from "@/components/Gallery";
@@ -24,7 +23,6 @@ const Index = () => {
     remixCharacter,
   } = useCharacterGenerator();
 
-  // Add some parallax effect on mouse move for a subtle interactive feel
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       const x = e.clientX / window.innerWidth;
@@ -49,7 +47,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Decoration elements */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
         <div 
           className="absolute top-20 left-10 w-64 h-64 bg-comic-blue/10 rounded-full blur-3xl opacity-60 parallax" 
@@ -69,13 +66,10 @@ const Index = () => {
 
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="space-y-12">
-          {/* API Key Input Section */}
-          <section className="glass-card p-6 md:p-8 max-w-3xl mx-auto">
-            <h2 className="text-xl font-semibold mb-4 text-center">Enter Your OpenAI API Key</h2>
-            <ApiKeyInput apiKey={apiKey} onChange={updateApiKey} />
+          <section className="flex justify-center">
+            <ApiKeyModal apiKey={apiKey} onChange={updateApiKey} />
           </section>
 
-          {/* Character Options Section */}
           <section className="glass-card p-6 md:p-8 max-w-3xl mx-auto animate-fade-up" style={{ animationDelay: '200ms' }}>
             <h2 className="text-xl font-semibold mb-6 text-center">Design Your Character</h2>
             <CharacterForm
@@ -86,7 +80,6 @@ const Index = () => {
             />
           </section>
 
-          {/* Image Display Section */}
           {(imageUrl || isLoading) && (
             <section className="max-w-3xl mx-auto animate-fade-up" style={{ animationDelay: '300ms' }}>
               <h2 className="text-xl font-semibold mb-6 text-center">Your Comic Character</h2>
@@ -99,7 +92,6 @@ const Index = () => {
             </section>
           )}
 
-          {/* Gallery Section */}
           <section className="max-w-6xl mx-auto animate-fade-up pb-12" style={{ animationDelay: '400ms' }}>
             <h2 className="text-xl font-semibold mb-6 text-center">Character Gallery</h2>
             <p className="text-center text-muted-foreground mb-8 max-w-2xl mx-auto">
