@@ -23,17 +23,29 @@ export type CharacterType =
   | 'Fairy'
   | 'Dinosaur';
 
-export type ThemeBackground = 
+export type Theme = 
   | 'Sci-Fi'
   | 'Fantasy'
+  | 'Mystery'
+  | 'Adventure'
+  | 'Magical'
+  | 'Futuristic'
+  | 'Historical'
+  | 'Western'
+  | 'Steampunk'
+  | 'Cyberpunk';
+
+export type Background = 
+  | 'Solid White'
+  | 'Solid Color'
   | 'Enchanted Forest'
-  | 'City'
-  | 'Town'
-  | 'Mystery City'
   | 'Outer Space'
-  | 'Underwater'
+  | 'Cityscape'
+  | 'Underwater Scene'
   | 'Medieval Castle'
-  | 'Desert Oasis';
+  | 'Desert Oasis'
+  | 'Mountain Landscape'
+  | 'Abstract Pattern';
 
 export type Action = 
   | 'Explore'
@@ -50,7 +62,9 @@ export type Action =
 export interface CharacterFormData {
   artStyle: ArtStyle | '';
   characterType: CharacterType | '';
-  themeBackground: ThemeBackground | '';
+  theme: Theme | '';
+  background: Background | '';
+  backgroundColor: string | '';
   action: Action | '';
 }
 

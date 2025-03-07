@@ -9,7 +9,9 @@ const useCharacterGenerator = () => {
   const [formData, setFormData] = useState<CharacterFormData>({
     artStyle: "",
     characterType: "",
-    themeBackground: "",
+    theme: "",
+    background: "",
+    backgroundColor: "",
     action: "",
   });
   
@@ -52,8 +54,15 @@ const useCharacterGenerator = () => {
       return false;
     }
 
-    // Check if all form fields are filled
-    const isComplete = Object.values(formData).every((value) => value !== "");
+    // Check if all required form fields are filled
+    const requiredFields: (keyof CharacterFormData)[] = ["artStyle", "characterType", "theme", "background", "action"];
+    const isComplete = requiredFields.every(field => formData[field] !== "");
+    
+    // Check if backgroundColor is provided when background is "Solid Color"
+    if (formData.background === "Solid Color" && !formData.backgroundColor) {
+      toast.error("Please select a background color");
+      return false;
+    }
     
     if (!isComplete) {
       toast.error("Please complete all character options");

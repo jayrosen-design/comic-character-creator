@@ -52,16 +52,26 @@ export const generateCharacterImage = async (
     throw new Error("OpenAI API key is required");
   }
 
-  const { artStyle, characterType, themeBackground, action } = formData;
+  const { artStyle, characterType, theme, background, backgroundColor, action } = formData;
 
   // Get the art style-specific prompt
   const artStylePrompt = artStyle ? ART_STYLE_PROMPTS[artStyle] : "";
+
+  // Compose the background description
+  let backgroundDescription = "";
+  if (background === "Solid White") {
+    backgroundDescription = "a plain white background";
+  } else if (background === "Solid Color") {
+    backgroundDescription = `a solid ${COLOR_NAME_MAP[backgroundColor] || backgroundColor} background`;
+  } else {
+    backgroundDescription = background;
+  }
 
   // Compose the prompt using user selections and style-specific prompt
   const prompt = `
     ${artStylePrompt}
     
-    A ${characterType} in a ${themeBackground} setting, ${action}. 
+    A ${characterType} in a ${theme} themed setting with ${backgroundDescription}, ${action}. 
     
     ${SAFETY_PRE_PROMPT}
   `;
@@ -111,4 +121,18 @@ export const generateCharacterImage = async (
     toast.error(errorMessage);
     throw new Error(errorMessage);
   }
+};
+
+// Map color codes to human-readable color names for the prompt
+const COLOR_NAME_MAP: Record<string, string> = {
+  "#F2FCE2": "soft green",
+  "#FEF7CD": "soft yellow",
+  "#FEC6A1": "soft orange",
+  "#E5DEFF": "soft purple",
+  "#FFDEE2": "soft pink",
+  "#D3E4FD": "soft blue",
+  "#8B5CF6": "vivid purple",
+  "#D946EF": "magenta pink",
+  "#F97316": "bright orange",
+  "#0EA5E9": "ocean blue",
 };
