@@ -21,6 +21,29 @@ Unacceptable examples include:
 - Any adult themes or explicit content.
 `;
 
+// Art style-specific pre-prompts to guide DALL-E 3
+const ART_STYLE_PROMPTS = {
+  "Classic Comic": "Generate an illustration in a classic comic style: use bold ink outlines, vibrant colors, and halftone dot effects to create a dynamic, panel-like look reminiscent of mid-20th century comic books. The artwork should have clear, defined lines and a slightly retro feel.",
+  
+  "Manga": "Generate an illustration in a traditional manga style: draw it primarily in black and white with minimal use of color. Use clean line art, expressive facial features, and detailed cross-hatching for shading, evoking the classic look of Japanese manga.",
+  
+  "Modern Cartoon": "Generate an illustration in a modern cartoon style: use smooth, clean lines and a playful digital look with bright, varied colors. The image should be simple yet energetic, capturing a contemporary animated feel.",
+  
+  "Superhero": "Generate an illustration in a superhero comic style: depict dynamic poses and dramatic lighting with bold, striking colors and strong outlines. The image should exude action and heroism, reminiscent of classic superhero adventures.",
+  
+  "Animated": "Generate an illustration in an animated style: create a lively, energetic scene with vibrant colors, smooth curves, and simple shading that mimic the look of popular TV cartoons. The artwork should feel like it's ready for a fun animated series.",
+  
+  "Vintage": "Generate an illustration in a vintage comic style: use muted or sepia-toned colors, soft lines, and a slightly aged texture to evoke a nostalgic, old-school feel. The artwork should look like it came from a classic storybook or early comic strip.",
+  
+  "Chibi": "Generate an illustration in a chibi style: create characters with cute, exaggerated proportions such as oversized heads and large eyes. Use soft pastel colors and minimal, playful detail to make the characters look adorable and endearing.",
+  
+  "Digital Art": "Generate an illustration in a digital art style: produce a crisp, high-resolution image with clean lines and a vibrant color palette that highlights modern digital techniques. The artwork should be sharp and detailed, showcasing the versatility of digital creation.",
+  
+  "Watercolor": "Generate an illustration in a watercolor style: use soft, blended colors and delicate brush strokes to create a dreamy, hand-painted look. The image should have gentle gradients and a fluid, artistic quality that feels like a watercolor painting.",
+  
+  "Minimalist": "Generate an illustration in a minimalist style: use simple shapes, a limited color palette, and clean lines to clearly depict the subject. The artwork should convey its idea with minimal detail while remaining visually appealing and easy to understand."
+};
+
 export const generateCharacterImage = async (
   formData: CharacterFormData,
   apiKey: string
@@ -31,9 +54,15 @@ export const generateCharacterImage = async (
 
   const { artStyle, characterType, themeBackground, action } = formData;
 
-  // Compose the prompt using user selections
+  // Get the art style-specific prompt
+  const artStylePrompt = artStyle ? ART_STYLE_PROMPTS[artStyle] : "";
+
+  // Compose the prompt using user selections and style-specific prompt
   const prompt = `
-    ${artStyle}, ${characterType} in a ${themeBackground} setting, ${action}. 
+    ${artStylePrompt}
+    
+    A ${characterType} in a ${themeBackground} setting, ${action}. 
+    
     ${SAFETY_PRE_PROMPT}
   `;
 
