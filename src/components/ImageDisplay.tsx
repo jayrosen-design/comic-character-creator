@@ -3,16 +3,26 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ArtStyle } from "@/types";
+import ArtStyleFunFact from "./ArtStyleFunFact";
 
 interface ImageDisplayProps {
   imageUrl: string | null;
+  artStyle?: ArtStyle | "";
   onRegenerate: () => void;
   isLoading: boolean;
   isSavingImage?: boolean;
   className?: string;
 }
 
-const ImageDisplay = ({ imageUrl, onRegenerate, isLoading, isSavingImage = false, className }: ImageDisplayProps) => {
+const ImageDisplay = ({ 
+  imageUrl, 
+  artStyle, 
+  onRegenerate, 
+  isLoading, 
+  isSavingImage = false, 
+  className 
+}: ImageDisplayProps) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
 
   // Reset loading state when imageUrl changes
@@ -67,6 +77,12 @@ const ImageDisplay = ({ imageUrl, onRegenerate, isLoading, isSavingImage = false
           </>
         )}
       </div>
+
+      {!isLoading && imageUrl && artStyle && (
+        <div className="mt-4 mb-6 animate-fade-up" style={{ animationDelay: '300ms' }}>
+          <ArtStyleFunFact artStyle={artStyle as ArtStyle} />
+        </div>
+      )}
 
       {!isLoading && imageUrl && (
         <div className="flex justify-center mt-6 space-x-4 animate-fade-up">

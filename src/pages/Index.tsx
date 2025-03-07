@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -85,6 +86,7 @@ const Index = () => {
               <h2 className="text-xl font-semibold mb-6 text-center">Your Comic Character</h2>
               <ImageDisplay
                 imageUrl={imageUrl}
+                artStyle={formData.artStyle}
                 onRegenerate={resetImage}
                 isLoading={isLoading}
                 isSavingImage={isSavingImage}
