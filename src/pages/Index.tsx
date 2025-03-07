@@ -1,8 +1,6 @@
-
 import { useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ApiKeyModal from "@/components/ApiKeyModal";
 import CharacterForm from "@/components/CharacterForm";
 import ImageDisplay from "@/components/ImageDisplay";
 import Gallery from "@/components/Gallery";
@@ -63,14 +61,10 @@ const Index = () => {
         ></div>
       </div>
 
-      <Header />
+      <Header apiKey={apiKey} onApiKeyChange={updateApiKey} />
 
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="space-y-12">
-          <section className="flex justify-center">
-            <ApiKeyModal apiKey={apiKey} onChange={updateApiKey} />
-          </section>
-
           <section className="glass-card p-6 md:p-8 max-w-3xl mx-auto animate-fade-up" style={{ animationDelay: '200ms' }}>
             <h2 className="text-xl font-semibold mb-6 text-center">Design Your Character</h2>
             <CharacterForm
