@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -20,6 +21,7 @@ const Index = () => {
     generateCharacter,
     resetImage,
     remixCharacter,
+    deleteCharacter,
   } = useCharacterGenerator();
 
   useEffect(() => {
@@ -96,6 +98,7 @@ const Index = () => {
             <Gallery 
               images={galleryImages} 
               onRemix={remixCharacter}
+              onDelete={deleteCharacter}
             />
           </section>
         </div>

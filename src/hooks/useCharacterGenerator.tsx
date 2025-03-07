@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from "react";
 import { CharacterFormData } from "@/types";
 import { generateCharacterImage } from "@/lib/api";
 import { toast } from "sonner";
-import { saveImage, loadStoredImages, StoredImage } from "@/lib/imageStorage";
+import { saveImage, loadStoredImages, deleteImage, StoredImage } from "@/lib/imageStorage";
 
 const useCharacterGenerator = () => {
   const [formData, setFormData] = useState<CharacterFormData>({
@@ -15,7 +14,6 @@ const useCharacterGenerator = () => {
     action: "",
   });
   
-  // Initialize API key from session storage if available
   const [apiKey, setApiKey] = useState<string>(() => {
     return sessionStorage.getItem("openai_api_key") || "";
   });
@@ -26,7 +24,6 @@ const useCharacterGenerator = () => {
   const [galleryImages, setGalleryImages] = useState<StoredImage[]>([]);
   const [isSavingImage, setIsSavingImage] = useState<boolean>(false);
 
-  // Load stored images on initial render
   useEffect(() => {
     const images = loadStoredImages();
     setGalleryImages(images);
@@ -44,7 +41,6 @@ const useCharacterGenerator = () => {
 
   const updateApiKey = (key: string) => {
     setApiKey(key);
-    // Store API key in session storage
     sessionStorage.setItem("openai_api_key", key);
   };
 
@@ -54,11 +50,9 @@ const useCharacterGenerator = () => {
       return false;
     }
 
-    // Check if all required form fields are filled
     const requiredFields: (keyof CharacterFormData)[] = ["artStyle", "characterType", "theme", "background", "action"];
     const isComplete = requiredFields.every(field => formData[field] !== "");
     
-    // Check if backgroundColor is provided when background is "Solid Color"
     if (formData.background === "Solid Color" && !formData.backgroundColor) {
       toast.error("Please select a background color");
       return false;
@@ -82,14 +76,11 @@ const useCharacterGenerator = () => {
       const generatedImageUrl = await generateCharacterImage(formData, apiKey);
       setImageUrl(generatedImageUrl);
       
-      // Show toast for uploading
       toast.info("Saving image to gallery...");
       setIsSavingImage(true);
       
-      // Save the image to storage (this now includes uploading to ImgBB)
       const newImage = await saveImage(generatedImageUrl, { ...formData });
       
-      // Update gallery images
       setGalleryImages(prev => [newImage, ...prev]);
       
       toast.success("Character created and saved to gallery!");
@@ -112,10 +103,19 @@ const useCharacterGenerator = () => {
   
   const remixCharacter = (settings: CharacterFormData) => {
     setFormData(settings);
-    // Scroll to the top of the page to see the form
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    // Show toast to indicate settings loaded
     toast.info("Character settings loaded - ready to generate!");
+  };
+
+  const deleteCharacter = (imageId: string) => {
+    const success = deleteImage(imageId);
+    
+    if (success) {
+      setGalleryImages(prev => prev.filter(img => img.id !== imageId));
+      toast.success("Character deleted from gallery");
+    } else {
+      toast.error("Failed to delete character");
+    }
   };
 
   return {
@@ -131,6 +131,7 @@ const useCharacterGenerator = () => {
     generateCharacter,
     resetImage,
     remixCharacter,
+    deleteCharacter,
   };
 };
 

@@ -48,6 +48,26 @@ export const saveImage = async (url: string, settings: CharacterFormData): Promi
   }
 };
 
+// Delete an image from localStorage
+export const deleteImage = (imageId: string): boolean => {
+  try {
+    const images = loadStoredImages();
+    const updatedImages = images.filter(image => image.id !== imageId);
+    
+    // If no images were removed, return false
+    if (updatedImages.length === images.length) {
+      return false;
+    }
+    
+    // Store the updated array back in localStorage
+    localStorage.setItem("comic-character-images", JSON.stringify(updatedImages));
+    return true;
+  } catch (error) {
+    console.error("Error deleting image from storage:", error);
+    return false;
+  }
+};
+
 // Upload image to ImgBB
 const uploadToImgBB = async (imageUrl: string): Promise<string> => {
   try {
