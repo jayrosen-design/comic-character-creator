@@ -32,7 +32,7 @@ const Gallery = ({ images, onRemix, className }: GalleryProps) => {
   };
 
   const formatSettingsCaption = (settings: CharacterFormData) => {
-    return `${settings.artStyle} ${settings.characterType} in ${settings.themeBackground}, ${settings.action}`;
+    return `${settings.artStyle} ${settings.characterType} in ${settings.theme}, ${settings.background}, ${settings.action}`;
   };
 
   return (
