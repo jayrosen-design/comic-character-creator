@@ -66,3 +66,10 @@ export interface ApiError {
   type: string;
   code: string;
 }
+
+export interface StoredImage {
+  id: string;
+  url: string;
+  createdAt: number;
+  settings: CharacterFormData;
+}

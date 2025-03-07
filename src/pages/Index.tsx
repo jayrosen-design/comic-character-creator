@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import ApiKeyInput from "@/components/ApiKeyInput";
 import CharacterForm from "@/components/CharacterForm";
 import ImageDisplay from "@/components/ImageDisplay";
+import Gallery from "@/components/Gallery";
 import useCharacterGenerator from "@/hooks/useCharacterGenerator";
 
 const Index = () => {
@@ -14,10 +15,12 @@ const Index = () => {
     imageUrl,
     isLoading,
     error,
+    galleryImages,
     updateFormField,
     updateApiKey,
     generateCharacter,
     resetImage,
+    remixCharacter,
   } = useCharacterGenerator();
 
   // Add some parallax effect on mouse move for a subtle interactive feel
@@ -93,6 +96,18 @@ const Index = () => {
               />
             </section>
           )}
+
+          {/* Gallery Section */}
+          <section className="max-w-6xl mx-auto animate-fade-up pb-12" style={{ animationDelay: '400ms' }}>
+            <h2 className="text-xl font-semibold mb-6 text-center">Character Gallery</h2>
+            <p className="text-center text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Check out characters created by everyone! Click "Remix" on any character to use its settings.
+            </p>
+            <Gallery 
+              images={galleryImages} 
+              onRemix={remixCharacter}
+            />
+          </section>
         </div>
       </main>
 

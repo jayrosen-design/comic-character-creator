@@ -1,8 +1,9 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CharacterFormData } from "@/types";
 import { generateCharacterImage } from "@/lib/api";
 import { toast } from "sonner";
+import { saveImage, loadStoredImages, StoredImage } from "@/lib/imageStorage";
 
 const useCharacterGenerator = () => {
   const [formData, setFormData] = useState<CharacterFormData>({
@@ -20,6 +21,13 @@ const useCharacterGenerator = () => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [galleryImages, setGalleryImages] = useState<StoredImage[]>([]);
+
+  // Load stored images on initial render
+  useEffect(() => {
+    const images = loadStoredImages();
+    setGalleryImages(images);
+  }, []);
 
   const updateFormField = <K extends keyof CharacterFormData>(
     field: K,
@@ -63,6 +71,13 @@ const useCharacterGenerator = () => {
     try {
       const imageUrl = await generateCharacterImage(formData, apiKey);
       setImageUrl(imageUrl);
+      
+      // Save the image to storage
+      const newImage = saveImage(imageUrl, { ...formData });
+      
+      // Update gallery images
+      setGalleryImages(prev => [newImage, ...prev]);
+      
       toast.success("Character created successfully!");
     } catch (error) {
       if (error instanceof Error) {
@@ -78,6 +93,14 @@ const useCharacterGenerator = () => {
   const resetImage = () => {
     setImageUrl(null);
   };
+  
+  const remixCharacter = (settings: CharacterFormData) => {
+    setFormData(settings);
+    // Scroll to the top of the page to see the form
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Show toast to indicate settings loaded
+    toast.info("Character settings loaded - ready to generate!");
+  };
 
   return {
     formData,
@@ -85,10 +108,12 @@ const useCharacterGenerator = () => {
     imageUrl,
     isLoading,
     error,
+    galleryImages,
     updateFormField,
     updateApiKey,
     generateCharacter,
     resetImage,
+    remixCharacter,
   };
 };
 
