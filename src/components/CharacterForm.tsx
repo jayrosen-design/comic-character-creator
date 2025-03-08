@@ -1,9 +1,11 @@
+
 import { 
   ArtStyle, 
   CharacterType, 
   Theme, 
   Background, 
-  Action, 
+  Action,
+  Medium,
   CharacterFormData,
   AdvancedArtStyle 
 } from "@/types";
@@ -39,6 +41,11 @@ const BACKGROUNDS: Background[] = [
 const ACTIONS: Action[] = [
   'Explore', 'Jump', 'Run', 'Smile', 'Adventure',
   'Fly', 'Dance', 'Play', 'Investigate', 'Imagine'
+];
+
+const MEDIUMS: Medium[] = [
+  'Pencil Sketch', 'Ink Drawing', '2-Tone', '3-Tone', 'Watercolor Wash',
+  'Digital Painting', 'Marker Rendering', 'Charcoal Drawing', 'Pastel', 'Mixed Media'
 ];
 
 const ADVANCED_ART_STYLES: AdvancedArtStyle[] = getAdvancedArtStyleCategories();
@@ -172,6 +179,27 @@ const CharacterForm = ({
         )}
 
         <div className="space-y-2 animate-fade-up" style={{ animationDelay: '200ms' }}>
+          <label htmlFor="medium" className="block text-sm font-medium text-foreground/80">
+            Medium
+          </label>
+          <Select
+            value={formData.medium || ""}
+            onValueChange={(value) => onUpdateField("medium", value as Medium)}
+          >
+            <SelectTrigger id="medium" className="w-full h-12 rounded-xl">
+              <SelectValue placeholder="Select Medium" />
+            </SelectTrigger>
+            <SelectContent className="dropdown-fancy">
+              {MEDIUMS.map((medium) => (
+                <SelectItem key={medium} value={medium} className="cursor-pointer">
+                  {medium}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2 animate-fade-up" style={{ animationDelay: '250ms' }}>
           <label htmlFor="characterType" className="block text-sm font-medium text-foreground/80">
             Character Type
           </label>

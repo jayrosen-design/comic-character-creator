@@ -13,6 +13,7 @@ const useCharacterGenerator = () => {
     background: "",
     backgroundColor: "",
     action: "",
+    medium: "",
     advancedMode: false,
     advancedArtStyle: "",
     artistName: "",

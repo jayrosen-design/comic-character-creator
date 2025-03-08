@@ -1,3 +1,4 @@
+
 export type ArtStyle = 
   | 'Classic Comic'
   | 'Manga'
@@ -28,6 +29,18 @@ export type AdvancedArtStyle =
   | 'Graphic Novel'
   | 'Vintage Comic'
   | 'Modern Comic';
+
+export type Medium = 
+  | 'Pencil Sketch'
+  | 'Ink Drawing'
+  | '2-Tone'
+  | '3-Tone'
+  | 'Watercolor Wash'
+  | 'Digital Painting'
+  | 'Marker Rendering'
+  | 'Charcoal Drawing'
+  | 'Pastel'
+  | 'Mixed Media';
 
 export type CharacterType = 
   | 'Boy'
@@ -84,6 +97,7 @@ export interface CharacterFormData {
   background: Background | '';
   backgroundColor: string | '';
   action: Action | '';
+  medium: Medium | '';
   advancedMode?: boolean;
   advancedArtStyle?: AdvancedArtStyle | '';
   artistName?: string | '';

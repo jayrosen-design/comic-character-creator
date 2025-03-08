@@ -45,6 +45,20 @@ const ART_STYLE_PROMPTS = {
   "Minimalist": "Generate an illustration in a minimalist style: use simple shapes, a limited color palette, and clean lines to clearly depict the subject. The artwork should convey its idea with minimal detail while remaining visually appealing and easy to understand."
 };
 
+// Medium-specific descriptions for the prompt
+const MEDIUM_MAPPING: Record<string, string> = {
+  "Pencil Sketch": "rendered as a pencil sketch on white paper",
+  "Ink Drawing": "rendered as an ink drawing on white paper",
+  "2-Tone": "with a 2-tone color scheme",
+  "3-Tone": "with a 3-tone color scheme",
+  "Watercolor Wash": "in a watercolor wash style on white paper",
+  "Digital Painting": "rendered as a digital painting",
+  "Marker Rendering": "in a marker rendering style",
+  "Charcoal Drawing": "as a charcoal drawing",
+  "Pastel": "in a pastel illustration style on white paper",
+  "Mixed Media": "using a mixed media technique"
+};
+
 export const generateCharacterImage = async (
   formData: CharacterFormData,
   apiKey: string
@@ -53,7 +67,7 @@ export const generateCharacterImage = async (
     throw new Error("OpenAI API key is required");
   }
 
-  const { artStyle, characterType, theme, background, backgroundColor, action, advancedMode, advancedArtStyle, artistName } = formData;
+  const { artStyle, characterType, theme, background, backgroundColor, action, advancedMode, advancedArtStyle, artistName, medium } = formData;
   
   // Build the prompt from individual conditional parts
   const promptParts: string[] = [];
@@ -69,12 +83,17 @@ export const generateCharacterImage = async (
     promptParts.push(ART_STYLE_PROMPTS[artStyle]);
   }
 
-  // 2. Character description with setting and action
+  // 2. Add medium information if provided
+  if (medium && MEDIUM_MAPPING[medium]) {
+    promptParts.push(MEDIUM_MAPPING[medium] + ".");
+  }
+
+  // 3. Character description with setting and action
   promptParts.push(
     `A full-body, uncropped ${characterType} in a ${theme} setting performing ${action}.`
   );
 
-  // 3. Background handling
+  // 4. Background handling
   if (background === "Solid White") {
     promptParts.push("On a plain white background. For a solid white background, generate a pure character illustration with no additional elements.");
   } else if (background === "Solid Color") {
@@ -83,20 +102,20 @@ export const generateCharacterImage = async (
     promptParts.push(`With a background of ${background}.`);
   }
 
-  // 4. Ensure full character is depicted
+  // 5. Ensure full character is depicted
   promptParts.push("Ensure that only one character is depicted and that the entire character is clearly visible.");
 
-  // 5. Exclude weapons or harmful objects (only in standard mode)
+  // 6. Exclude weapons or harmful objects (only in standard mode)
   if (!advancedMode) {
     promptParts.push("Do not include any weapons, guns, or harmful objects in the illustration.");
   }
   
-  // 6. Append the safety pre-prompt (only for standard mode)
+  // 7. Append the safety pre-prompt (only for standard mode)
   if (!advancedMode) {
     promptParts.push(SAFETY_PRE_PROMPT.trim());
   }
   
-  // 7. No text instruction - add this for both modes
+  // 8. No text instruction - add this for both modes
   promptParts.push("Do not include any text, lettering, or typographic elements in the illustration.");
 
   // Join all parts into the final prompt string
