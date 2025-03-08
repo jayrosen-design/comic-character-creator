@@ -3,12 +3,16 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ArtStyle } from "@/types";
+import { ArtStyle, AdvancedArtStyle } from "@/types";
 import ArtStyleFunFact from "./ArtStyleFunFact";
+import ArtistInfoPanel from "./ArtistInfoPanel";
 
 interface ImageDisplayProps {
   imageUrl: string | null;
   artStyle?: ArtStyle | "";
+  advancedMode?: boolean;
+  advancedArtStyle?: AdvancedArtStyle | "";
+  artistName?: string | "";
   onRegenerate: () => void;
   isLoading: boolean;
   isSavingImage?: boolean;
@@ -18,6 +22,9 @@ interface ImageDisplayProps {
 const ImageDisplay = ({ 
   imageUrl, 
   artStyle, 
+  advancedMode = false,
+  advancedArtStyle = "",
+  artistName = "",
   onRegenerate, 
   isLoading, 
   isSavingImage = false, 
@@ -78,9 +85,16 @@ const ImageDisplay = ({
         )}
       </div>
 
-      {!isLoading && imageUrl && artStyle && (
+      {!isLoading && imageUrl && (
         <div className="mt-4 mb-6 animate-fade-up" style={{ animationDelay: '300ms' }}>
-          <ArtStyleFunFact artStyle={artStyle as ArtStyle} />
+          {advancedMode && advancedArtStyle && artistName ? (
+            <ArtistInfoPanel 
+              category={advancedArtStyle as AdvancedArtStyle} 
+              artistName={artistName}
+            />
+          ) : (
+            artStyle && <ArtStyleFunFact artStyle={artStyle as ArtStyle} />
+          )}
         </div>
       )}
 

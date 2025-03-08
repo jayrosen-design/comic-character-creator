@@ -1,10 +1,21 @@
 
-import { ArtStyle, CharacterType, Theme, Background, Action, CharacterFormData } from "@/types";
+import { 
+  ArtStyle, 
+  CharacterType, 
+  Theme, 
+  Background, 
+  Action, 
+  CharacterFormData,
+  AdvancedArtStyle 
+} from "@/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Wand2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { getAdvancedArtStyleCategories, getArtistsByCategory } from "@/data/artistsData";
 
 // Define dropdown options
 const ART_STYLES: ArtStyle[] = [
@@ -31,6 +42,9 @@ const ACTIONS: Action[] = [
   'Explore', 'Jump', 'Run', 'Smile', 'Adventure',
   'Fly', 'Dance', 'Play', 'Investigate', 'Imagine'
 ];
+
+// Get advanced art style categories
+const ADVANCED_ART_STYLES: AdvancedArtStyle[] = getAdvancedArtStyleCategories();
 
 // Predefined color options
 const COLOR_OPTIONS = [
@@ -64,30 +78,109 @@ const CharacterForm = ({
   isLoading,
   className
 }: CharacterFormProps) => {
+  // Get artist options based on selected category
+  const getArtistOptions = () => {
+    if (!formData.advancedArtStyle) return [];
+    return getArtistsByCategory(formData.advancedArtStyle as AdvancedArtStyle);
+  };
+
+  // Toggle advanced mode
+  const handleAdvancedModeToggle = (checked: boolean) => {
+    onUpdateField("advancedMode", checked);
+    // Reset art style fields when toggling
+    onUpdateField("artStyle", "");
+    onUpdateField("advancedArtStyle", "");
+    onUpdateField("artistName", "");
+  };
+
   return (
     <div className={cn("w-full max-w-3xl mx-auto", className)}>
+      {/* Advanced Mode Toggle */}
+      <div className="flex items-center justify-end mb-4 animate-fade-up" style={{ animationDelay: '50ms' }}>
+        <Label htmlFor="advanced-mode" className="mr-2 text-sm font-medium text-foreground/80">
+          Advanced Mode
+        </Label>
+        <Switch 
+          id="advanced-mode" 
+          checked={formData.advancedMode || false} 
+          onCheckedChange={handleAdvancedModeToggle}
+        />
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Art Style Dropdown */}
-        <div className="space-y-2 animate-fade-up" style={{ animationDelay: '100ms' }}>
-          <label htmlFor="artStyle" className="block text-sm font-medium text-foreground/80">
-            Art Style
-          </label>
-          <Select
-            value={formData.artStyle}
-            onValueChange={(value) => onUpdateField("artStyle", value as ArtStyle)}
-          >
-            <SelectTrigger id="artStyle" className="w-full h-12 rounded-xl">
-              <SelectValue placeholder="Select Art Style" />
-            </SelectTrigger>
-            <SelectContent className="dropdown-fancy">
-              {ART_STYLES.map((style) => (
-                <SelectItem key={style} value={style} className="cursor-pointer">
-                  {style}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        {/* Art Style Dropdowns based on mode */}
+        {!formData.advancedMode ? (
+          // Standard Art Style Dropdown
+          <div className="space-y-2 animate-fade-up" style={{ animationDelay: '100ms' }}>
+            <label htmlFor="artStyle" className="block text-sm font-medium text-foreground/80">
+              Art Style
+            </label>
+            <Select
+              value={formData.artStyle}
+              onValueChange={(value) => onUpdateField("artStyle", value as ArtStyle)}
+            >
+              <SelectTrigger id="artStyle" className="w-full h-12 rounded-xl">
+                <SelectValue placeholder="Select Art Style" />
+              </SelectTrigger>
+              <SelectContent className="dropdown-fancy">
+                {ART_STYLES.map((style) => (
+                  <SelectItem key={style} value={style} className="cursor-pointer">
+                    {style}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        ) : (
+          // Advanced Art Style Category Dropdown
+          <div className="space-y-2 animate-fade-up" style={{ animationDelay: '100ms' }}>
+            <label htmlFor="advancedArtStyle" className="block text-sm font-medium text-foreground/80">
+              Advanced Art Style
+            </label>
+            <Select
+              value={formData.advancedArtStyle || ""}
+              onValueChange={(value) => {
+                onUpdateField("advancedArtStyle", value as AdvancedArtStyle);
+                onUpdateField("artistName", ""); // Reset artist when category changes
+              }}
+            >
+              <SelectTrigger id="advancedArtStyle" className="w-full h-12 rounded-xl">
+                <SelectValue placeholder="Select Advanced Art Style" />
+              </SelectTrigger>
+              <SelectContent className="dropdown-fancy">
+                {ADVANCED_ART_STYLES.map((style) => (
+                  <SelectItem key={style} value={style} className="cursor-pointer">
+                    {style}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
+        {/* Artist Name Dropdown (only in Advanced Mode) */}
+        {formData.advancedMode && formData.advancedArtStyle && (
+          <div className="space-y-2 animate-fade-up" style={{ animationDelay: '150ms' }}>
+            <label htmlFor="artistName" className="block text-sm font-medium text-foreground/80">
+              Artist Name
+            </label>
+            <Select
+              value={formData.artistName || ""}
+              onValueChange={(value) => onUpdateField("artistName", value)}
+            >
+              <SelectTrigger id="artistName" className="w-full h-12 rounded-xl">
+                <SelectValue placeholder="Select Artist" />
+              </SelectTrigger>
+              <SelectContent className="dropdown-fancy">
+                {getArtistOptions().map((artist) => (
+                  <SelectItem key={artist.artistName} value={artist.artistName} className="cursor-pointer">
+                    {artist.artistName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
 
         {/* Character Type Dropdown */}
         <div className="space-y-2 animate-fade-up" style={{ animationDelay: '200ms' }}>

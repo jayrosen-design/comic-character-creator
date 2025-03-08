@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { CharacterFormData } from "@/types";
 import { generateCharacterImage } from "@/lib/api";
@@ -12,6 +13,9 @@ const useCharacterGenerator = () => {
     background: "",
     backgroundColor: "",
     action: "",
+    advancedMode: false,
+    advancedArtStyle: "",
+    artistName: "",
   });
   
   const [apiKey, setApiKey] = useState<string>(() => {
@@ -50,8 +54,25 @@ const useCharacterGenerator = () => {
       return false;
     }
 
-    const requiredFields: (keyof CharacterFormData)[] = ["artStyle", "characterType", "theme", "background", "action"];
+    const requiredFields: (keyof CharacterFormData)[] = ["characterType", "theme", "background", "action"];
     const isComplete = requiredFields.every(field => formData[field] !== "");
+    
+    // Validate art style based on mode
+    if (formData.advancedMode) {
+      if (!formData.advancedArtStyle) {
+        toast.error("Please select an Advanced Art Style");
+        return false;
+      }
+      if (!formData.artistName) {
+        toast.error("Please select an Artist");
+        return false;
+      }
+    } else {
+      if (!formData.artStyle) {
+        toast.error("Please select an Art Style");
+        return false;
+      }
+    }
     
     if (formData.background === "Solid Color" && !formData.backgroundColor) {
       toast.error("Please select a background color");

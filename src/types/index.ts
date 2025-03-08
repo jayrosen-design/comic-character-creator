@@ -11,6 +11,25 @@ export type ArtStyle =
   | 'Watercolor'
   | 'Minimalist';
 
+export type AdvancedArtStyle =
+  | 'Children\'s Book Illustrations'
+  | 'Comic Book Artists'
+  | 'Cartoonists'
+  | 'Cartoon TV Shows'
+  | 'Anime'
+  | 'Manga'
+  | 'Chibi'
+  | 'Digital Art'
+  | 'Cel-Shaded Artist'
+  | 'Sci-Fi Illustrations'
+  | 'Videogame Artists'
+  | 'Pre-1950 Cartoonists'
+  | 'Art Nouveau'
+  | 'Ukiyo-e'
+  | 'Graphic Novel'
+  | 'Vintage Comic'
+  | 'Modern Comic';
+
 export type CharacterType = 
   | 'Boy'
   | 'Girl'
@@ -66,6 +85,9 @@ export interface CharacterFormData {
   background: Background | '';
   backgroundColor: string | '';
   action: Action | '';
+  advancedMode?: boolean;
+  advancedArtStyle?: AdvancedArtStyle | '';
+  artistName?: string | '';
 }
 
 export interface ApiResponse {
@@ -86,4 +108,11 @@ export interface StoredImage {
   url: string;
   createdAt: number;
   settings: CharacterFormData;
+}
+
+export interface ArtistInfo {
+  category: AdvancedArtStyle;
+  artistName: string;
+  knownFor: string;
+  description: string;
 }

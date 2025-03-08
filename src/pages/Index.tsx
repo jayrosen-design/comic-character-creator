@@ -83,6 +83,9 @@ const Index = () => {
               <ImageDisplay
                 imageUrl={imageUrl}
                 artStyle={formData.artStyle}
+                advancedMode={formData.advancedMode}
+                advancedArtStyle={formData.advancedArtStyle}
+                artistName={formData.artistName}
                 onRegenerate={resetImage}
                 isLoading={isLoading}
                 isSavingImage={isSavingImage}

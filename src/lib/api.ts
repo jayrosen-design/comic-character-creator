@@ -1,6 +1,7 @@
 
-import { CharacterFormData } from "@/types";
+import { CharacterFormData, ArtistInfo } from "@/types";
 import { toast } from "sonner";
+import { getArtistInfo } from "@/data/artistsData";
 
 const OPENAI_API_URL = "https://api.openai.com/v1/images/generations";
 
@@ -52,13 +53,20 @@ export const generateCharacterImage = async (
     throw new Error("OpenAI API key is required");
   }
 
-  const { artStyle, characterType, theme, background, backgroundColor, action } = formData;
+  const { artStyle, characterType, theme, background, backgroundColor, action, advancedMode, advancedArtStyle, artistName } = formData;
   
   // Build the prompt from individual conditional parts
   const promptParts: string[] = [];
 
-  // 1. Art style-specific prompt (if available)
-  if (artStyle && ART_STYLE_PROMPTS[artStyle]) {
+  // 1. Art style guidance (standard or advanced)
+  if (advancedMode && advancedArtStyle && artistName) {
+    // Get artist info for advanced mode
+    const artistInfo = getArtistInfo(advancedArtStyle, artistName);
+    if (artistInfo) {
+      promptParts.push(`Generate a child-friendly comic/cartoon illustration in the style of ${artistInfo.artistName}. (${artistInfo.knownFor}: ${artistInfo.description})`);
+    }
+  } else if (artStyle && ART_STYLE_PROMPTS[artStyle]) {
+    // Standard art style
     promptParts.push(ART_STYLE_PROMPTS[artStyle]);
   }
 
