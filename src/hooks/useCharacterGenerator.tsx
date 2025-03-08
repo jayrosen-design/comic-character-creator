@@ -22,6 +22,10 @@ const useCharacterGenerator = () => {
     return sessionStorage.getItem("openai_api_key") || "";
   });
   
+  const [serpApiKey, setSerpApiKey] = useState<string>(() => {
+    return sessionStorage.getItem("serpapi_key") || "";
+  });
+  
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,9 +47,14 @@ const useCharacterGenerator = () => {
     }));
   };
 
-  const updateApiKey = (key: string) => {
-    setApiKey(key);
-    sessionStorage.setItem("openai_api_key", key);
+  const updateApiKey = (key: string, keyType: 'openai' | 'serpapi') => {
+    if (keyType === 'openai') {
+      setApiKey(key);
+      sessionStorage.setItem("openai_api_key", key);
+    } else if (keyType === 'serpapi') {
+      setSerpApiKey(key);
+      sessionStorage.setItem("serpapi_key", key);
+    }
   };
 
   const validateForm = (): boolean => {
@@ -142,6 +151,7 @@ const useCharacterGenerator = () => {
   return {
     formData,
     apiKey,
+    serpApiKey,
     imageUrl,
     isLoading,
     isSavingImage,

@@ -11,6 +11,7 @@ const Index = () => {
   const {
     formData,
     apiKey,
+    serpApiKey,
     imageUrl,
     isLoading,
     isSavingImage,
@@ -25,9 +26,9 @@ const Index = () => {
   } = useCharacterGenerator();
 
   // Show artist info whenever an artist is selected in advanced mode
-  const shouldShowArtistInfo = formData.advancedMode && 
+  const shouldShowArtistInfo = !!(formData.advancedMode && 
                                formData.advancedArtStyle && 
-                               formData.artistName;
+                               formData.artistName);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -68,7 +69,11 @@ const Index = () => {
         ></div>
       </div>
 
-      <Header apiKey={apiKey} onApiKeyChange={updateApiKey} />
+      <Header 
+        apiKey={apiKey} 
+        serpApiKey={serpApiKey}
+        onApiKeyChange={updateApiKey} 
+      />
 
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="space-y-12">

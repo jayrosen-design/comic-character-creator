@@ -7,10 +7,13 @@ import { KeyRound } from "lucide-react";
 
 interface ApiKeyModalProps {
   apiKey: string;
-  onChange: (value: string) => void;
+  serpApiKey: string;
+  onChange: (value: string, keyType: 'openai' | 'serpapi') => void;
 }
 
-const ApiKeyModal = ({ apiKey, onChange }: ApiKeyModalProps) => {
+const ApiKeyModal = ({ apiKey, serpApiKey, onChange }: ApiKeyModalProps) => {
+  const hasKeys = apiKey || serpApiKey;
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -19,15 +22,19 @@ const ApiKeyModal = ({ apiKey, onChange }: ApiKeyModalProps) => {
           className="gap-2 bg-white/70 backdrop-blur-sm border-primary/20 hover:bg-primary/5"
         >
           <KeyRound size={16} />
-          {apiKey ? "Update API Key" : "Enter API Key"}
+          {hasKeys ? "Update API Keys" : "Enter API Keys"}
         </Button>
       </SheetTrigger>
       <SheetContent className="sm:max-w-md">
         <SheetHeader>
-          <SheetTitle className="text-xl">Enter Your OpenAI API Key</SheetTitle>
+          <SheetTitle className="text-xl">Enter Your API Keys</SheetTitle>
         </SheetHeader>
         <div className="py-6">
-          <ApiKeyInput apiKey={apiKey} onChange={onChange} />
+          <ApiKeyInput 
+            apiKey={apiKey} 
+            serpApiKey={serpApiKey} 
+            onChange={onChange} 
+          />
         </div>
       </SheetContent>
     </Sheet>

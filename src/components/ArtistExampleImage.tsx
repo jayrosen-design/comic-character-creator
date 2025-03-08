@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { InfoIcon, Image as ImageIcon } from "lucide-react";
+import { InfoIcon, ImageIcon } from "lucide-react";
 
 interface ArtistExampleImageProps {
   artistName: string;
@@ -18,12 +18,20 @@ const ArtistExampleImage = ({ artistName, className }: ArtistExampleImageProps) 
     setIsLoading(true);
     setError(null);
     
+    // Get SerpAPI key from sessionStorage
+    const serpApiKey = sessionStorage.getItem("serpapi_key");
+    
+    if (!serpApiKey) {
+      setError("SerpAPI key is required to fetch artist examples");
+      setIsLoading(false);
+      return;
+    }
+    
     // Create a search query for the artist's illustration work
     const searchQuery = encodeURIComponent(`${artistName} art illustration style example`);
     
-    // Use a small proxy function to get an image from Google search
-    // This is a very simple approach - in a production app, you would use a proper API
-    fetch(`https://serpapi.com/search.json?q=${searchQuery}&tbm=isch&ijn=0&api_key=demo`)
+    // Use SerpAPI to get images
+    fetch(`https://serpapi.com/search.json?engine=google_images&q=${searchQuery}&google_domain=google.com&gl=us&hl=en&api_key=${serpApiKey}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Failed to fetch image');
@@ -31,9 +39,8 @@ const ArtistExampleImage = ({ artistName, className }: ArtistExampleImageProps) 
         return response.json();
       })
       .then(data => {
-        // SerpAPI demo mode returns limited results, but we'll use it for demo purposes
         if (data.images_results && data.images_results.length > 0) {
-          // Get a random image from the results to show variety
+          // Get a random image from the first 5 results to show variety
           const randomIndex = Math.floor(Math.random() * Math.min(5, data.images_results.length));
           setImageUrl(data.images_results[randomIndex].thumbnail);
         } else {
@@ -82,7 +89,7 @@ const ArtistExampleImage = ({ artistName, className }: ArtistExampleImageProps) 
         />
       </div>
       <div className="bg-muted/20 px-3 py-2 text-xs text-center text-muted-foreground">
-        Example of {artistName}'s style (search result)
+        Example of {artistName}'s style (via SerpAPI)
       </div>
     </div>
   );
