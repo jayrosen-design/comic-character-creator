@@ -1,4 +1,3 @@
-
 import { 
   ArtStyle, 
   CharacterType, 
@@ -17,7 +16,6 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { getAdvancedArtStyleCategories, getArtistsByCategory } from "@/data/artistsData";
 
-// Define dropdown options
 const ART_STYLES: ArtStyle[] = [
   'Classic Comic', 'Manga', 'Modern Cartoon', 'Superhero', 'Animated',
   'Vintage', 'Chibi', 'Digital Art', 'Watercolor', 'Minimalist'
@@ -43,10 +41,8 @@ const ACTIONS: Action[] = [
   'Fly', 'Dance', 'Play', 'Investigate', 'Imagine'
 ];
 
-// Get advanced art style categories
 const ADVANCED_ART_STYLES: AdvancedArtStyle[] = getAdvancedArtStyleCategories();
 
-// Predefined color options
 const COLOR_OPTIONS = [
   { value: '#F2FCE2', label: 'Soft Green' },
   { value: '#FEF7CD', label: 'Soft Yellow' },
@@ -78,16 +74,13 @@ const CharacterForm = ({
   isLoading,
   className
 }: CharacterFormProps) => {
-  // Get artist options based on selected category
   const getArtistOptions = () => {
     if (!formData.advancedArtStyle) return [];
     return getArtistsByCategory(formData.advancedArtStyle as AdvancedArtStyle);
   };
 
-  // Toggle advanced mode
   const handleAdvancedModeToggle = (checked: boolean) => {
     onUpdateField("advancedMode", checked);
-    // Reset art style fields when toggling
     onUpdateField("artStyle", "");
     onUpdateField("advancedArtStyle", "");
     onUpdateField("artistName", "");
@@ -95,7 +88,6 @@ const CharacterForm = ({
 
   return (
     <div className={cn("w-full max-w-3xl mx-auto", className)}>
-      {/* Advanced Mode Toggle */}
       <div className="flex items-center justify-end mb-4 animate-fade-up" style={{ animationDelay: '50ms' }}>
         <Label htmlFor="advanced-mode" className="mr-2 text-sm font-medium text-foreground/80">
           Advanced Mode
@@ -108,9 +100,7 @@ const CharacterForm = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Art Style Dropdowns based on mode */}
         {!formData.advancedMode ? (
-          // Standard Art Style Dropdown
           <div className="space-y-2 animate-fade-up" style={{ animationDelay: '100ms' }}>
             <label htmlFor="artStyle" className="block text-sm font-medium text-foreground/80">
               Art Style
@@ -132,7 +122,6 @@ const CharacterForm = ({
             </Select>
           </div>
         ) : (
-          // Advanced Art Style Category Dropdown
           <div className="space-y-2 animate-fade-up" style={{ animationDelay: '100ms' }}>
             <label htmlFor="advancedArtStyle" className="block text-sm font-medium text-foreground/80">
               Advanced Art Style
@@ -141,7 +130,7 @@ const CharacterForm = ({
               value={formData.advancedArtStyle || ""}
               onValueChange={(value) => {
                 onUpdateField("advancedArtStyle", value as AdvancedArtStyle);
-                onUpdateField("artistName", ""); // Reset artist when category changes
+                onUpdateField("artistName", "");
               }}
             >
               <SelectTrigger id="advancedArtStyle" className="w-full h-12 rounded-xl">
@@ -158,8 +147,7 @@ const CharacterForm = ({
           </div>
         )}
 
-        {/* Artist Name Dropdown (only in Advanced Mode) */}
-        {formData.advancedMode && formData.advancedArtStyle && (
+        {formData.advancedMode && (
           <div className="space-y-2 animate-fade-up" style={{ animationDelay: '150ms' }}>
             <label htmlFor="artistName" className="block text-sm font-medium text-foreground/80">
               Artist Name
@@ -167,9 +155,10 @@ const CharacterForm = ({
             <Select
               value={formData.artistName || ""}
               onValueChange={(value) => onUpdateField("artistName", value)}
+              disabled={!formData.advancedArtStyle}
             >
               <SelectTrigger id="artistName" className="w-full h-12 rounded-xl">
-                <SelectValue placeholder="Select Artist" />
+                <SelectValue placeholder={!formData.advancedArtStyle ? "Select Art Style first" : "Select Artist"} />
               </SelectTrigger>
               <SelectContent className="dropdown-fancy">
                 {getArtistOptions().map((artist) => (
@@ -182,7 +171,6 @@ const CharacterForm = ({
           </div>
         )}
 
-        {/* Character Type Dropdown */}
         <div className="space-y-2 animate-fade-up" style={{ animationDelay: '200ms' }}>
           <label htmlFor="characterType" className="block text-sm font-medium text-foreground/80">
             Character Type
@@ -204,7 +192,6 @@ const CharacterForm = ({
           </Select>
         </div>
 
-        {/* Theme Dropdown */}
         <div className="space-y-2 animate-fade-up" style={{ animationDelay: '300ms' }}>
           <label htmlFor="theme" className="block text-sm font-medium text-foreground/80">
             Theme
@@ -226,7 +213,6 @@ const CharacterForm = ({
           </Select>
         </div>
 
-        {/* Background Dropdown */}
         <div className="space-y-2 animate-fade-up" style={{ animationDelay: '350ms' }}>
           <label htmlFor="background" className="block text-sm font-medium text-foreground/80">
             Background
@@ -235,7 +221,6 @@ const CharacterForm = ({
             value={formData.background}
             onValueChange={(value) => {
               onUpdateField("background", value as Background);
-              // Reset background color when switching away from Solid Color
               if (value !== 'Solid Color') {
                 onUpdateField("backgroundColor", "");
               }
@@ -254,7 +239,6 @@ const CharacterForm = ({
           </Select>
         </div>
 
-        {/* Color Dropdown (only shown when Solid Color is selected) */}
         {formData.background === 'Solid Color' && (
           <div className="space-y-2 animate-fade-up" style={{ animationDelay: '375ms' }}>
             <label htmlFor="backgroundColor" className="block text-sm font-medium text-foreground/80">
@@ -294,7 +278,6 @@ const CharacterForm = ({
           </div>
         )}
 
-        {/* Action Dropdown */}
         <div className="space-y-2 animate-fade-up" style={{ animationDelay: '400ms' }}>
           <label htmlFor="action" className="block text-sm font-medium text-foreground/80">
             Action
