@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { CharacterFormData } from "@/types";
+import { CharacterFormData, ApiKeyType } from "@/types";
 import { generateCharacterImage } from "@/lib/api";
 import { toast } from "sonner";
 import { saveImage, loadStoredImages, deleteImage, StoredImage } from "@/lib/imageStorage";
@@ -26,6 +26,10 @@ const useCharacterGenerator = () => {
     return sessionStorage.getItem("serpapi_key") || "";
   });
   
+  const [imgbbApiKey, setImgbbApiKey] = useState<string>(() => {
+    return sessionStorage.getItem("imgbb_api_key") || "";
+  });
+  
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -47,13 +51,16 @@ const useCharacterGenerator = () => {
     }));
   };
 
-  const updateApiKey = (key: string, keyType: 'openai' | 'serpapi') => {
+  const updateApiKey = (key: string, keyType: ApiKeyType) => {
     if (keyType === 'openai') {
       setApiKey(key);
       sessionStorage.setItem("openai_api_key", key);
     } else if (keyType === 'serpapi') {
       setSerpApiKey(key);
       sessionStorage.setItem("serpapi_key", key);
+    } else if (keyType === 'imgbb') {
+      setImgbbApiKey(key);
+      sessionStorage.setItem("imgbb_api_key", key);
     }
   };
 
@@ -109,7 +116,7 @@ const useCharacterGenerator = () => {
       toast.info("Saving image to gallery...");
       setIsSavingImage(true);
       
-      const newImage = await saveImage(generatedImageUrl, { ...formData });
+      const newImage = await saveImage(generatedImageUrl, { ...formData }, imgbbApiKey);
       
       setGalleryImages(prev => [newImage, ...prev]);
       
@@ -152,6 +159,7 @@ const useCharacterGenerator = () => {
     formData,
     apiKey,
     serpApiKey,
+    imgbbApiKey,
     imageUrl,
     isLoading,
     isSavingImage,

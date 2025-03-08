@@ -22,10 +22,10 @@ export const loadStoredImages = (): StoredImage[] => {
 };
 
 // Save a new image to localStorage
-export const saveImage = async (url: string, settings: CharacterFormData): Promise<StoredImage> => {
+export const saveImage = async (url: string, settings: CharacterFormData, customImgbbApiKey?: string): Promise<StoredImage> => {
   try {
     // Upload the image to ImgBB
-    const permanentUrl = await uploadToImgBB(url);
+    const permanentUrl = await uploadToImgBB(url, customImgbbApiKey);
     
     const images = loadStoredImages();
     const newImage: StoredImage = {
@@ -69,7 +69,7 @@ export const deleteImage = (imageId: string): boolean => {
 };
 
 // Upload image to ImgBB
-const uploadToImgBB = async (imageUrl: string): Promise<string> => {
+const uploadToImgBB = async (imageUrl: string, customApiKey?: string): Promise<string> => {
   try {
     // First, fetch the image as a blob
     const response = await fetch(imageUrl);
@@ -83,8 +83,8 @@ const uploadToImgBB = async (imageUrl: string): Promise<string> => {
     const formData = new FormData();
     formData.append('image', blob);
     
-    // Free ImgBB API key (this is a public demo key that can be included in client-side code)
-    const apiKey = '6d207e02198a847aa98d0a2a901485a5';
+    // Use custom API key if provided, otherwise use default
+    const apiKey = customApiKey || '6d207e02198a847aa98d0a2a901485a5';
     
     // Upload to ImgBB
     const uploadResponse = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {

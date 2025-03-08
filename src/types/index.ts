@@ -1,4 +1,3 @@
-
 export type ArtStyle = 
   | 'Classic Comic'
   | 'Manga'
@@ -116,3 +115,5 @@ export interface ArtistInfo {
   knownFor: string;
   description: string;
 }
+
+export type ApiKeyType = 'openai' | 'serpapi' | 'imgbb';

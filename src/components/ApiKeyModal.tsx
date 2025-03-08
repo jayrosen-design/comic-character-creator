@@ -4,15 +4,17 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Button } from "@/components/ui/button";
 import ApiKeyInput from "@/components/ApiKeyInput";
 import { KeyRound } from "lucide-react";
+import { ApiKeyType } from "@/types";
 
 interface ApiKeyModalProps {
   apiKey: string;
   serpApiKey: string;
-  onChange: (value: string, keyType: 'openai' | 'serpapi') => void;
+  imgbbApiKey: string;
+  onChange: (value: string, keyType: ApiKeyType) => void;
 }
 
-const ApiKeyModal = ({ apiKey, serpApiKey, onChange }: ApiKeyModalProps) => {
-  const hasKeys = apiKey || serpApiKey;
+const ApiKeyModal = ({ apiKey, serpApiKey, imgbbApiKey, onChange }: ApiKeyModalProps) => {
+  const hasKeys = apiKey || serpApiKey || imgbbApiKey;
 
   return (
     <Sheet>
@@ -32,7 +34,8 @@ const ApiKeyModal = ({ apiKey, serpApiKey, onChange }: ApiKeyModalProps) => {
         <div className="py-6">
           <ApiKeyInput 
             apiKey={apiKey} 
-            serpApiKey={serpApiKey} 
+            serpApiKey={serpApiKey}
+            imgbbApiKey={imgbbApiKey}
             onChange={onChange} 
           />
         </div>

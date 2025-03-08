@@ -1,14 +1,16 @@
 
 import { Sparkles } from "lucide-react";
 import ApiKeyModal from "@/components/ApiKeyModal";
+import { ApiKeyType } from "@/types";
 
 interface HeaderProps {
   apiKey: string;
   serpApiKey: string;
-  onApiKeyChange: (value: string, keyType: 'openai' | 'serpapi') => void;
+  imgbbApiKey: string;
+  onApiKeyChange: (value: string, keyType: ApiKeyType) => void;
 }
 
-const Header = ({ apiKey, serpApiKey, onApiKeyChange }: HeaderProps) => {
+const Header = ({ apiKey, serpApiKey, imgbbApiKey, onApiKeyChange }: HeaderProps) => {
   return (
     <header className="container mx-auto py-6 px-4">
       <div className="flex flex-col items-center text-center">
@@ -18,7 +20,8 @@ const Header = ({ apiKey, serpApiKey, onApiKeyChange }: HeaderProps) => {
           </div>
           <ApiKeyModal 
             apiKey={apiKey} 
-            serpApiKey={serpApiKey} 
+            serpApiKey={serpApiKey}
+            imgbbApiKey={imgbbApiKey}
             onChange={onApiKeyChange} 
           />
         </div>

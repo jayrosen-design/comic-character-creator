@@ -12,6 +12,7 @@ const Index = () => {
     formData,
     apiKey,
     serpApiKey,
+    imgbbApiKey,
     imageUrl,
     isLoading,
     isSavingImage,
@@ -72,6 +73,7 @@ const Index = () => {
       <Header 
         apiKey={apiKey} 
         serpApiKey={serpApiKey}
+        imgbbApiKey={imgbbApiKey}
         onApiKeyChange={updateApiKey} 
       />
 
