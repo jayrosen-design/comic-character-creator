@@ -60,11 +60,10 @@ export const generateCharacterImage = async (
 
   // 1. Art style guidance (standard or advanced)
   if (advancedMode && advancedArtStyle && artistName) {
-    // Get artist info for advanced mode
-    const artistInfo = getArtistInfo(advancedArtStyle, artistName);
-    if (artistInfo) {
-      promptParts.push(`Generate a child-friendly comic/cartoon illustration in the style of ${artistInfo.artistName}. (${artistInfo.knownFor}: ${artistInfo.description})`);
-    }
+    // Simplified prompt for Advanced Mode
+    promptParts.push(
+      `Child-friendly, ${advancedArtStyle} illustration of a full body character, in the artistic style of ${artistName}.`
+    );
   } else if (artStyle && ART_STYLE_PROMPTS[artStyle]) {
     // Standard art style
     promptParts.push(ART_STYLE_PROMPTS[artStyle]);
@@ -75,34 +74,27 @@ export const generateCharacterImage = async (
     `A full-body, uncropped ${characterType} in a ${theme} setting performing ${action}.`
   );
 
-  // 3. Background description (handle Solid White and Solid Color)
-  let backgroundDescription = "";
+  // 3. Background handling
   if (background === "Solid White") {
-    backgroundDescription = "on a plain white background";
+    promptParts.push("On a plain white background. For a solid white background, generate a pure character illustration with no additional elements.");
   } else if (background === "Solid Color") {
-    backgroundDescription = `on a solid ${COLOR_NAME_MAP[backgroundColor] || backgroundColor} background`;
+    promptParts.push(`On a solid ${COLOR_NAME_MAP[backgroundColor] || backgroundColor} background.`);
   } else {
-    backgroundDescription = `with a background of ${background}`;
+    promptParts.push(`With a background of ${background}.`);
   }
-  promptParts.push(backgroundDescription + ".");
 
-  // 4. Ensure one complete character is depicted
-  promptParts.push(
-    "Ensure that only one character is depicted and the entire character is clearly visible without any cropping."
-  );
-  
-  // 5. Specific instruction for solid white background
-  if (background === "Solid White") {
-    promptParts.push(
-      "For a solid white background, generate a pure character illustration with no additional background elements."
-    );
+  // 4. Ensure full character is depicted
+  promptParts.push("Ensure that only one character is depicted and that the entire character is clearly visible.");
+
+  // 5. Exclude weapons or harmful objects (only in standard mode)
+  if (!advancedMode) {
+    promptParts.push("Do not include any weapons, guns, or harmful objects in the illustration.");
   }
   
-  // 6. Exclude weapons or harmful objects
-  promptParts.push("Do not include any weapons, guns, or harmful objects in the illustration.");
-  
-  // 7. Append the safety pre-prompt
-  promptParts.push(SAFETY_PRE_PROMPT.trim());
+  // 6. Append the safety pre-prompt (only for standard mode)
+  if (!advancedMode) {
+    promptParts.push(SAFETY_PRE_PROMPT.trim());
+  }
 
   // Join all parts into the final prompt string
   const prompt = promptParts.join(" ");
