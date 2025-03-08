@@ -18,8 +18,8 @@ const ArtistInfoPanel = ({ category, artistName, className }: ArtistInfoPanelPro
   }
   
   return (
-    <div className={`p-4 rounded-xl bg-indigo-50 border border-indigo-200 shadow-sm animate-fade-up ${className}`}>
-      <div className="flex items-start gap-3">
+    <div className={`p-4 rounded-xl bg-indigo-50 border border-indigo-200 shadow-sm h-full ${className}`}>
+      <div className="flex items-start gap-3 h-full">
         <div className="flex-shrink-0 bg-indigo-100 p-2 rounded-full">
           <InfoIcon className="h-5 w-5 text-indigo-600" />
         </div>

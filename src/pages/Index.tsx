@@ -24,6 +24,11 @@ const Index = () => {
     deleteCharacter,
   } = useCharacterGenerator();
 
+  // Show artist info whenever an artist is selected in advanced mode
+  const shouldShowArtistInfo = formData.advancedMode && 
+                               formData.advancedArtStyle && 
+                               formData.artistName;
+
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       const x = e.clientX / window.innerWidth;
@@ -77,9 +82,11 @@ const Index = () => {
             />
           </section>
 
-          {(imageUrl || isLoading) && (
+          {(imageUrl || isLoading || shouldShowArtistInfo) && (
             <section className="max-w-3xl mx-auto animate-fade-up" style={{ animationDelay: '300ms' }}>
-              <h2 className="text-xl font-semibold mb-6 text-center">Your Comic Character</h2>
+              <h2 className="text-xl font-semibold mb-6 text-center">
+                {imageUrl || isLoading ? "Your Comic Character" : "Artist Example"}
+              </h2>
               <ImageDisplay
                 imageUrl={imageUrl}
                 artStyle={formData.artStyle}
@@ -89,6 +96,7 @@ const Index = () => {
                 onRegenerate={resetImage}
                 isLoading={isLoading}
                 isSavingImage={isSavingImage}
+                showArtistInfo={shouldShowArtistInfo}
               />
             </section>
           )}

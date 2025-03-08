@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { ArtStyle, AdvancedArtStyle } from "@/types";
 import ArtStyleFunFact from "./ArtStyleFunFact";
 import ArtistInfoPanel from "./ArtistInfoPanel";
+import ArtistExampleImage from "./ArtistExampleImage";
 
 interface ImageDisplayProps {
   imageUrl: string | null;
@@ -17,6 +18,7 @@ interface ImageDisplayProps {
   isLoading: boolean;
   isSavingImage?: boolean;
   className?: string;
+  showArtistInfo?: boolean;
 }
 
 const ImageDisplay = ({ 
@@ -28,7 +30,8 @@ const ImageDisplay = ({
   onRegenerate, 
   isLoading, 
   isSavingImage = false, 
-  className 
+  className,
+  showArtistInfo = false
 }: ImageDisplayProps) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
 
@@ -54,47 +57,60 @@ const ImageDisplay = ({
     document.body.removeChild(link);
   };
 
-  if (!imageUrl && !isLoading) {
+  // Check if we should show the artist info section
+  const shouldShowArtistInfo = (advancedMode && advancedArtStyle && artistName) && 
+    (showArtistInfo || (!isLoading && imageUrl));
+
+  if (!imageUrl && !isLoading && !shouldShowArtistInfo) {
     return null;
   }
 
   return (
     <div className={cn("w-full max-w-3xl mx-auto mt-8", className)}>
-      <div className="relative bg-white/50 rounded-2xl overflow-hidden shadow-lg border border-white/60 animate-scale-in">
-        {isLoading ? (
-          <div className="aspect-square flex items-center justify-center bg-muted/30">
-            <div className="w-16 h-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
-          </div>
-        ) : (
-          <>
-            {isImageLoading && (
-              <div className="absolute inset-0 flex items-center justify-center bg-muted/30">
-                <div className="w-16 h-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
-              </div>
-            )}
-            <img
-              src={imageUrl || ""}
-              alt="Generated comic character"
-              className={cn(
-                "w-full aspect-square object-cover transition-opacity duration-500",
-                isImageLoading ? "opacity-0" : "opacity-100"
-              )}
-              onLoad={handleImageLoad}
-            />
-          </>
-        )}
-      </div>
+      {shouldShowArtistInfo && (
+        <div className="mb-6 grid gap-6 md:grid-cols-2 animate-fade-up" style={{ animationDelay: '150ms' }}>
+          <ArtistInfoPanel 
+            category={advancedArtStyle as AdvancedArtStyle} 
+            artistName={artistName}
+            className="h-full"
+          />
+          <ArtistExampleImage 
+            artistName={artistName}
+            className="h-full"
+          />
+        </div>
+      )}
 
-      {!isLoading && imageUrl && (
-        <div className="mt-4 mb-6 animate-fade-up" style={{ animationDelay: '300ms' }}>
-          {advancedMode && advancedArtStyle && artistName ? (
-            <ArtistInfoPanel 
-              category={advancedArtStyle as AdvancedArtStyle} 
-              artistName={artistName}
-            />
+      {(isLoading || imageUrl) && (
+        <div className="relative bg-white/50 rounded-2xl overflow-hidden shadow-lg border border-white/60 animate-scale-in">
+          {isLoading ? (
+            <div className="aspect-square flex items-center justify-center bg-muted/30">
+              <div className="w-16 h-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+            </div>
           ) : (
-            artStyle && <ArtStyleFunFact artStyle={artStyle as ArtStyle} />
+            <>
+              {isImageLoading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-muted/30">
+                  <div className="w-16 h-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+                </div>
+              )}
+              <img
+                src={imageUrl || ""}
+                alt="Generated comic character"
+                className={cn(
+                  "w-full aspect-square object-cover transition-opacity duration-500",
+                  isImageLoading ? "opacity-0" : "opacity-100"
+                )}
+                onLoad={handleImageLoad}
+              />
+            </>
           )}
+        </div>
+      )}
+
+      {!isLoading && imageUrl && !advancedMode && artStyle && (
+        <div className="mt-4 mb-6 animate-fade-up" style={{ animationDelay: '300ms' }}>
+          <ArtStyleFunFact artStyle={artStyle as ArtStyle} />
         </div>
       )}
 
