@@ -95,6 +95,9 @@ export const generateCharacterImage = async (
   if (!advancedMode) {
     promptParts.push(SAFETY_PRE_PROMPT.trim());
   }
+  
+  // 7. No text instruction - add this for both modes
+  promptParts.push("Do not include any text, lettering, or typographic elements in the illustration.");
 
   // Join all parts into the final prompt string
   const prompt = promptParts.join(" ");
