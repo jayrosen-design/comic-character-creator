@@ -1,7 +1,7 @@
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArtStyle, AdvancedArtStyle } from "@/types";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getArtistsByCategory } from "@/data/artistsData";
 import { getAllArtStyleCategories } from "@/data/artStyleDescriptions";
 
@@ -39,22 +39,20 @@ const ArtStyleSelector = ({
   onUpdateMedium
 }: ArtStyleSelectorProps) => {
   const allArtStyleCategories = getAllArtStyleCategories();
+  const [artistOptions, setArtistOptions] = useState<Array<{artistName: string, knownFor: string, artStyle: string, description: string}>>([]);
   
   useEffect(() => {
     if (advancedArtStyle) {
+      // Get artists for the selected category
       const artists = getArtistsByCategory(advancedArtStyle as AdvancedArtStyle);
-      console.log("Artists for selected category:", artists);
+      setArtistOptions(artists);
       console.log("Selected advanced art style:", advancedArtStyle);
+      console.log("Artists for selected category:", artists);
+      console.log(`Found ${artists.length} artists for category ${advancedArtStyle}`);
+    } else {
+      setArtistOptions([]);
     }
   }, [advancedArtStyle]);
-
-  const getArtistOptions = () => {
-    if (!advancedArtStyle) return [];
-    
-    const artists = getArtistsByCategory(advancedArtStyle as AdvancedArtStyle);
-    console.log(`Found ${artists.length} artists for category ${advancedArtStyle}`);
-    return artists;
-  };
 
   return (
     <>
@@ -113,13 +111,21 @@ const ArtStyleSelector = ({
           <Select
             value={artistName || ""}
             onValueChange={(value) => onUpdateArtistName(value)}
-            disabled={!advancedArtStyle}
+            disabled={!advancedArtStyle || artistOptions.length === 0}
           >
             <SelectTrigger id="artistName" className="w-full h-12 rounded-xl">
-              <SelectValue placeholder={!advancedArtStyle ? "Select Art Style first" : "Select Artist"} />
+              <SelectValue 
+                placeholder={
+                  !advancedArtStyle 
+                    ? "Select Art Style first" 
+                    : artistOptions.length === 0 
+                    ? "Loading artists..." 
+                    : "Select Artist"
+                } 
+              />
             </SelectTrigger>
             <SelectContent className="dropdown-fancy max-h-[300px]">
-              {getArtistOptions().map((artist) => (
+              {artistOptions.map((artist) => (
                 <SelectItem key={artist.artistName} value={artist.artistName} className="cursor-pointer">
                   {artist.artistName}
                 </SelectItem>
