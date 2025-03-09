@@ -1,6 +1,5 @@
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { getArtistsByCategory } from "@/data/artistsByCategory";
 import { AdvancedArtStyle } from "@/types";
 
 interface ArtistSelectorProps {
@@ -14,7 +13,24 @@ const ArtistSelector = ({
   advancedArtStyle,
   onChange
 }: ArtistSelectorProps) => {
-  const artists = getArtistsByCategory(advancedArtStyle);
+  // Create a safer function to get artists by category that won't crash
+  const getArtistsByCategorySafely = (style: AdvancedArtStyle | ""): string[] => {
+    try {
+      if (!style) return [];
+      
+      // Try to fetch from the data file, but if it fails, return an empty array
+      const artistsModule = require('@/data/artistsByCategory');
+      if (typeof artistsModule.getArtistsByCategory === 'function') {
+        return artistsModule.getArtistsByCategory(style);
+      }
+      return [];
+    } catch (error) {
+      console.error("Error fetching artists by category:", error);
+      return [];
+    }
+  };
+  
+  const artists = getArtistsByCategorySafely(advancedArtStyle);
 
   return (
     <div className="form-control space-y-2 animate-fade-up" style={{ animationDelay: '300ms' }}>

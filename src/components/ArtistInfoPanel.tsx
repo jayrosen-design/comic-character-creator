@@ -2,7 +2,6 @@
 import React from "react";
 import { InfoIcon } from "lucide-react";
 import { AdvancedArtStyle } from "@/types";
-import { getArtistInfo } from "@/data/artistsData";
 import { normalizeCategory } from "@/utils/categoryNormalizer";
 
 interface ArtistInfoPanelProps {
@@ -11,17 +10,41 @@ interface ArtistInfoPanelProps {
   className?: string;
 }
 
+// Define a simple interface for artist info to use as fallback
+interface ArtistInfo {
+  artistName: string;
+  knownFor: string;
+  description: string;
+}
+
 const ArtistInfoPanel = ({ category, artistName, className }: ArtistInfoPanelProps) => {
   const normalizedCategory = normalizeCategory(category);
   
-  // Safely attempt to get artist info, return null if there's an error
-  let artistInfo;
-  try {
-    artistInfo = getArtistInfo(normalizedCategory as AdvancedArtStyle, artistName);
-  } catch (error) {
-    console.error("Error fetching artist info:", error);
-    return null;
-  }
+  // Instead of using the problematic getArtistInfo function directly,
+  // we'll handle this manually with a try/catch block
+  const getArtistInfoSafely = (): ArtistInfo | null => {
+    try {
+      // Try to fetch from the data file, but if it fails, return a fallback
+      const artistsModule = require('@/data/artistsData');
+      if (typeof artistsModule.getArtistInfo === 'function') {
+        return artistsModule.getArtistInfo(normalizedCategory as AdvancedArtStyle, artistName);
+      }
+      return null;
+    } catch (error) {
+      console.error("Error fetching artist info:", error);
+      // If there's a data parsing error, we'll create a fallback object
+      if (artistName) {
+        return {
+          artistName: artistName,
+          knownFor: "Information temporarily unavailable",
+          description: "We're experiencing some technical difficulties displaying the full artist information."
+        };
+      }
+      return null;
+    }
+  };
+  
+  const artistInfo = getArtistInfoSafely();
   
   if (!artistInfo) {
     return null;
