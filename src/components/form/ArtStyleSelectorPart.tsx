@@ -1,10 +1,11 @@
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getAllArtStyleCategories } from "@/data/artistsByCategory";
+import { AdvancedArtStyle } from "@/types";
 
 interface ArtStyleSelectorPartProps {
-  advancedArtStyle: string;
-  onChange: (value: string) => void;
+  advancedArtStyle: AdvancedArtStyle | "";
+  onChange: (value: AdvancedArtStyle | "") => void;
 }
 
 const ArtStyleSelectorPart = ({
@@ -20,7 +21,7 @@ const ArtStyleSelectorPart = ({
       </label>
       <Select
         value={advancedArtStyle}
-        onValueChange={onChange}
+        onValueChange={(value) => onChange(value as AdvancedArtStyle | "")}
       >
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Select an art style" />

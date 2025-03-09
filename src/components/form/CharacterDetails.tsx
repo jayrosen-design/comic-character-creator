@@ -1,5 +1,6 @@
 
 import { 
+  CharacterFormData,
   CharacterType, 
   Theme, 
   Background, 
@@ -8,16 +9,11 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface CharacterDetailsProps {
-  characterType: string;
-  theme: string;
-  background: string;
-  backgroundColor: string;
-  action: string;
-  onUpdateCharacterType: (value: CharacterType) => void;
-  onUpdateTheme: (value: Theme) => void;
-  onUpdateBackground: (value: Background) => void;
-  onUpdateBackgroundColor: (value: string) => void;
-  onUpdateAction: (value: Action) => void;
+  formData: CharacterFormData;
+  onUpdateField: <K extends keyof CharacterFormData>(
+    field: K,
+    value: CharacterFormData[K]
+  ) => void;
 }
 
 const CHARACTER_TYPES: CharacterType[] = [
@@ -54,17 +50,11 @@ const COLOR_OPTIONS = [
 ];
 
 const CharacterDetails = ({
-  characterType,
-  theme,
-  background,
-  backgroundColor,
-  action,
-  onUpdateCharacterType,
-  onUpdateTheme,
-  onUpdateBackground,
-  onUpdateBackgroundColor,
-  onUpdateAction
+  formData,
+  onUpdateField
 }: CharacterDetailsProps) => {
+  const { characterType, theme, background, backgroundColor, action } = formData;
+
   return (
     <>
       <div className="space-y-2 animate-fade-up" style={{ animationDelay: '250ms' }}>
@@ -73,7 +63,7 @@ const CharacterDetails = ({
         </label>
         <Select
           value={characterType}
-          onValueChange={(value) => onUpdateCharacterType(value as CharacterType)}
+          onValueChange={(value) => onUpdateField("characterType", value as CharacterType)}
         >
           <SelectTrigger id="characterType" className="w-full h-12 rounded-xl">
             <SelectValue placeholder="Select Character Type" />
@@ -94,15 +84,15 @@ const CharacterDetails = ({
         </label>
         <Select
           value={theme}
-          onValueChange={(value) => onUpdateTheme(value as Theme)}
+          onValueChange={(value) => onUpdateField("theme", value as Theme)}
         >
           <SelectTrigger id="theme" className="w-full h-12 rounded-xl">
             <SelectValue placeholder="Select Theme" />
           </SelectTrigger>
           <SelectContent className="dropdown-fancy">
-            {THEMES.map((theme) => (
-              <SelectItem key={theme} value={theme} className="cursor-pointer">
-                {theme}
+            {THEMES.map((themeOpt) => (
+              <SelectItem key={themeOpt} value={themeOpt} className="cursor-pointer">
+                {themeOpt}
               </SelectItem>
             ))}
           </SelectContent>
@@ -116,9 +106,9 @@ const CharacterDetails = ({
         <Select
           value={background}
           onValueChange={(value) => {
-            onUpdateBackground(value as Background);
+            onUpdateField("background", value as Background);
             if (value !== 'Solid Color') {
-              onUpdateBackgroundColor("");
+              onUpdateField("backgroundColor", "");
             }
           }}
         >
@@ -126,9 +116,9 @@ const CharacterDetails = ({
             <SelectValue placeholder="Select Background" />
           </SelectTrigger>
           <SelectContent className="dropdown-fancy">
-            {BACKGROUNDS.map((background) => (
-              <SelectItem key={background} value={background} className="cursor-pointer">
-                {background}
+            {BACKGROUNDS.map((bgOpt) => (
+              <SelectItem key={bgOpt} value={bgOpt} className="cursor-pointer">
+                {bgOpt}
               </SelectItem>
             ))}
           </SelectContent>
@@ -142,7 +132,7 @@ const CharacterDetails = ({
           </label>
           <Select
             value={backgroundColor}
-            onValueChange={(value) => onUpdateBackgroundColor(value)}
+            onValueChange={(value) => onUpdateField("backgroundColor", value)}
           >
             <SelectTrigger id="backgroundColor" className="w-full h-12 rounded-xl">
               <SelectValue placeholder="Select Color">
@@ -180,15 +170,15 @@ const CharacterDetails = ({
         </label>
         <Select
           value={action}
-          onValueChange={(value) => onUpdateAction(value as Action)}
+          onValueChange={(value) => onUpdateField("action", value as Action)}
         >
           <SelectTrigger id="action" className="w-full h-12 rounded-xl">
             <SelectValue placeholder="Select Action" />
           </SelectTrigger>
           <SelectContent className="dropdown-fancy">
-            {ACTIONS.map((action) => (
-              <SelectItem key={action} value={action} className="cursor-pointer">
-                {action}
+            {ACTIONS.map((actionOpt) => (
+              <SelectItem key={actionOpt} value={actionOpt} className="cursor-pointer">
+                {actionOpt}
               </SelectItem>
             ))}
           </SelectContent>

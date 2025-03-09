@@ -63,7 +63,7 @@ const CharacterForm = ({
         ) : (
           <ArtStyleSelector
             artStyle={formData.artStyle}
-            onChange={(value) => onUpdateField("artStyle", value)}
+            onValueChange={(value) => onUpdateField("artStyle", value)}
           />
         )}
       </div>

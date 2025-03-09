@@ -1,11 +1,5 @@
 
-// This file contains the list of artists organized by art style category
-
-type ArtistsByCategory = {
-  [category: string]: string[];
-};
-
-export const ARTISTS_BY_CATEGORY: ArtistsByCategory = {
+export const ARTISTS_BY_CATEGORY = {
   "Children's Book Illustrations": [
     "Maurice Sendak",
     "Dr. Seuss (Theodor Geisel)",
@@ -493,16 +487,16 @@ export const ARTISTS_BY_CATEGORY: ArtistsByCategory = {
   ]
 };
 
-/**
- * Get artist names for a specific art style category
- */
-export function getArtistsByCategory(category: string): string[] {
-  return ARTISTS_BY_CATEGORY[category] || [];
-}
-
-/**
- * Get all available art style categories
- */
-export function getAllArtStyleCategories(): string[] {
+// Helper functions to work with the data
+export const getAllArtStyleCategories = (): string[] => {
   return Object.keys(ARTISTS_BY_CATEGORY);
-}
+};
+
+export const getArtistsByCategory = (category: string): string[] => {
+  if (!category) return [];
+  
+  // Handle any variations in category names
+  const normalizedCategory = category.trim();
+  
+  return ARTISTS_BY_CATEGORY[normalizedCategory] || [];
+};

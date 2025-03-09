@@ -1,10 +1,11 @@
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getArtistsByCategory } from "@/data/artistsByCategory";
+import { AdvancedArtStyle } from "@/types";
 
 interface ArtistSelectorProps {
   artistName: string;
-  advancedArtStyle: string;
+  advancedArtStyle: AdvancedArtStyle | "";
   onChange: (value: string) => void;
 }
 
