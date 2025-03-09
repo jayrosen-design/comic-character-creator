@@ -2,7 +2,7 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArtStyle, AdvancedArtStyle, ArtistInfo } from "@/types";
 import { useEffect, useState } from "react";
-import { getArtistsByCategory } from "@/data/artistsData";
+import { ARTISTS_DATA } from "@/data/artistsData";
 import { getAllArtStyleCategories } from "@/data/artStyleDescriptions";
 import { normalizeCategory } from "@/utils/categoryNormalizer";
 
@@ -51,12 +51,13 @@ const ArtStyleSelector = ({
         // Get normalized category name
         const normalizedCategory = normalizeCategory(advancedArtStyle);
         
-        // Get artists for the selected category
-        const artists = getArtistsByCategory(normalizedCategory as AdvancedArtStyle);
+        // Get artists directly from ARTISTS_DATA
+        const artists = ARTISTS_DATA.filter(artist => 
+          artist.category === normalizedCategory
+        );
         
         console.log("Selected advanced art style:", advancedArtStyle);
         console.log("Normalized category:", normalizedCategory);
-        console.log("Artists for selected category:", artists);
         console.log(`Found ${artists.length} artists for category ${normalizedCategory}`);
         
         setArtistOptions(artists);
