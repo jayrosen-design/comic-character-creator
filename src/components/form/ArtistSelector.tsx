@@ -13,24 +13,47 @@ const ArtistSelector = ({
   advancedArtStyle,
   onChange
 }: ArtistSelectorProps) => {
-  // Create a safer function to get artists by category that won't crash
+  // Enhanced function to safely get artists by category
   const getArtistsByCategorySafely = (style: AdvancedArtStyle | ""): string[] => {
+    // If no style selected, return empty array
+    if (!style) return [];
+    
     try {
-      if (!style) return [];
-      
-      // Try to fetch from the data file, but if it fails, return an empty array
-      const artistsModule = require('@/data/artistsByCategory');
-      if (typeof artistsModule.getArtistsByCategory === 'function') {
-        return artistsModule.getArtistsByCategory(style);
+      // Try multiple approaches to get the data
+      try {
+        const artistsModule = require('@/data/artistsByCategory');
+        if (typeof artistsModule.getArtistsByCategory === 'function') {
+          try {
+            const artists = artistsModule.getArtistsByCategory(style);
+            if (Array.isArray(artists)) {
+              return artists;
+            }
+          } catch (fnError) {
+            console.error("Error calling getArtistsByCategory:", fnError);
+          }
+        }
+      } catch (moduleError) {
+        console.error("Error importing artistsByCategory module:", moduleError);
       }
+      
+      // If we get here, we couldn't get valid data, return empty array
       return [];
     } catch (error) {
-      console.error("Error fetching artists by category:", error);
+      console.error("Unexpected error in getArtistsByCategorySafely:", error);
       return [];
     }
   };
   
   const artists = getArtistsByCategorySafely(advancedArtStyle);
+
+  // Validate the current artistName is still valid given the current style
+  const isArtistValid = artists.includes(artistName);
+  // If the current artist isn't valid for this style, call onChange with empty string
+  React.useEffect(() => {
+    if (artistName && !isArtistValid && advancedArtStyle) {
+      onChange("");
+    }
+  }, [artistName, isArtistValid, advancedArtStyle, onChange]);
 
   return (
     <div className="form-control space-y-2 animate-fade-up" style={{ animationDelay: '300ms' }}>
@@ -38,7 +61,7 @@ const ArtistSelector = ({
         Artist
       </label>
       <Select
-        value={artistName}
+        value={isArtistValid ? artistName : ""}
         onValueChange={onChange}
       >
         <SelectTrigger className="w-full">

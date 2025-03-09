@@ -20,19 +20,27 @@ interface ArtistInfo {
 const ArtistInfoPanel = ({ category, artistName, className }: ArtistInfoPanelProps) => {
   const normalizedCategory = normalizeCategory(category);
   
-  // Instead of using the problematic getArtistInfo function directly,
-  // we'll handle this manually with a try/catch block
+  // Enhanced safe access to artist info data
   const getArtistInfoSafely = (): ArtistInfo | null => {
+    if (!artistName || !category) return null;
+    
     try {
-      // Try to fetch from the data file, but if it fails, return a fallback
-      const artistsModule = require('@/data/artistsData');
-      if (typeof artistsModule.getArtistInfo === 'function') {
-        return artistsModule.getArtistInfo(normalizedCategory as AdvancedArtStyle, artistName);
+      // First attempt: try to safely require the module
+      try {
+        const artistsModule = require('@/data/artistsData');
+        if (typeof artistsModule.getArtistInfo === 'function') {
+          try {
+            const result = artistsModule.getArtistInfo(normalizedCategory as AdvancedArtStyle, artistName);
+            if (result) return result;
+          } catch (innerError) {
+            console.error("Error getting artist info from function:", innerError);
+          }
+        }
+      } catch (moduleError) {
+        console.error("Error importing artists data module:", moduleError);
       }
-      return null;
-    } catch (error) {
-      console.error("Error fetching artist info:", error);
-      // If there's a data parsing error, we'll create a fallback object
+      
+      // If we got here, provide a fallback
       if (artistName) {
         return {
           artistName: artistName,
@@ -40,7 +48,16 @@ const ArtistInfoPanel = ({ category, artistName, className }: ArtistInfoPanelPro
           description: "We're experiencing some technical difficulties displaying the full artist information."
         };
       }
+      
       return null;
+    } catch (error) {
+      console.error("Unexpected error in getArtistInfoSafely:", error);
+      // Final fallback
+      return artistName ? {
+        artistName: artistName,
+        knownFor: "Information unavailable",
+        description: "Artist information cannot be displayed."
+      } : null;
     }
   };
   
