@@ -40,15 +40,21 @@ const ArtStyleSelector = ({
 }: ArtStyleSelectorProps) => {
   const allArtStyleCategories = getAllArtStyleCategories();
   const [artistOptions, setArtistOptions] = useState<ArtistInfo[]>([]);
+  const [isLoadingArtists, setIsLoadingArtists] = useState<boolean>(false);
   
   useEffect(() => {
     if (advancedArtStyle) {
+      setIsLoadingArtists(true);
+      
       // Get artists for the selected category
       const artists = getArtistsByCategory(advancedArtStyle as AdvancedArtStyle);
       setArtistOptions(artists);
+      
       console.log("Selected advanced art style:", advancedArtStyle);
       console.log("Artists for selected category:", artists);
       console.log(`Found ${artists.length} artists for category ${advancedArtStyle}`);
+      
+      setIsLoadingArtists(false);
     } else {
       setArtistOptions([]);
     }
@@ -87,6 +93,7 @@ const ArtStyleSelector = ({
             onValueChange={(value) => {
               onUpdateAdvancedArtStyle(value as AdvancedArtStyle);
               onUpdateArtistName("");
+              setArtistOptions([]); // Clear artists when changing style
             }}
           >
             <SelectTrigger id="advancedArtStyle" className="w-full h-12 rounded-xl">
@@ -111,25 +118,35 @@ const ArtStyleSelector = ({
           <Select
             value={artistName || ""}
             onValueChange={(value) => onUpdateArtistName(value)}
-            disabled={!advancedArtStyle || artistOptions.length === 0}
+            disabled={!advancedArtStyle || isLoadingArtists}
           >
             <SelectTrigger id="artistName" className="w-full h-12 rounded-xl">
               <SelectValue 
                 placeholder={
                   !advancedArtStyle 
                     ? "Select Art Style first" 
-                    : artistOptions.length === 0 
+                    : isLoadingArtists 
                     ? "Loading artists..." 
+                    : artistOptions.length === 0 
+                    ? "No artists available for this style" 
                     : "Select Artist"
                 } 
               />
             </SelectTrigger>
             <SelectContent className="dropdown-fancy max-h-[300px]">
-              {artistOptions.map((artist) => (
-                <SelectItem key={artist.artistName} value={artist.artistName} className="cursor-pointer">
-                  {artist.artistName}
-                </SelectItem>
-              ))}
+              {artistOptions.length > 0 ? (
+                artistOptions.map((artist) => (
+                  <SelectItem key={artist.artistName} value={artist.artistName} className="cursor-pointer">
+                    {artist.artistName}
+                  </SelectItem>
+                ))
+              ) : (
+                <div className="px-2 py-4 text-center text-muted-foreground">
+                  {!advancedArtStyle 
+                    ? "Select an art style first" 
+                    : "No artists available for this style"}
+                </div>
+              )}
             </SelectContent>
           </Select>
         </div>
