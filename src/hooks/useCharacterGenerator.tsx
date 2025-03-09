@@ -14,7 +14,7 @@ const useCharacterGenerator = () => {
     backgroundColor: "",
     action: "",
     medium: "",
-    advancedMode: false,
+    advancedMode: true, // Changed from false to true to make Advanced mode the default
     advancedArtStyle: "",
     artistName: "",
   });
