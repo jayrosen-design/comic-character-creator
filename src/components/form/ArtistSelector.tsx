@@ -36,9 +36,9 @@ const ArtistSelector = ({
               </SelectItem>
             ))
           ) : (
-            <SelectItem value="" disabled>
+            <div className="px-2 py-2 text-sm text-muted-foreground">
               {advancedArtStyle ? "No artists available" : "Select an art style first"}
-            </SelectItem>
+            </div>
           )}
         </SelectContent>
       </Select>
