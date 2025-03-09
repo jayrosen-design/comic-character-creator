@@ -1,5 +1,4 @@
 
-import { Sparkles } from "lucide-react";
 import ApiKeyModal from "@/components/ApiKeyModal";
 import { ApiKeyType } from "@/types";
 
@@ -15,9 +14,6 @@ const Header = ({ apiKey, serpApiKey, imgbbApiKey, onApiKeyChange }: HeaderProps
     <header className="container mx-auto py-6 px-4">
       <div className="flex flex-col items-center text-center">
         <div className="flex items-center justify-center gap-4 mb-4">
-          <div className="inline-flex items-center justify-center p-2 bg-primary/10 rounded-full animate-bounce-small">
-            <Sparkles className="h-6 w-6 text-primary" />
-          </div>
           <ApiKeyModal 
             apiKey={apiKey} 
             serpApiKey={serpApiKey}
@@ -29,7 +25,7 @@ const Header = ({ apiKey, serpApiKey, imgbbApiKey, onApiKeyChange }: HeaderProps
           Comic Character Creator
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl animate-fade-up" style={{ animationDelay: '100ms' }}>
-          Create your own unique comic book character with just a few clicks!
+          Design and generate unique comic book characters with advanced art style controls!
         </p>
       </div>
     </header>
