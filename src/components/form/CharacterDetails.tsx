@@ -4,7 +4,8 @@ import {
   CharacterType, 
   Theme, 
   Background, 
-  Action
+  Action,
+  Medium
 } from "@/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -36,6 +37,11 @@ const ACTIONS: Action[] = [
   'Fly', 'Dance', 'Play', 'Investigate', 'Imagine'
 ];
 
+const MEDIUM_OPTIONS: Medium[] = [
+  'Digital Painting', 'Watercolor', 'Pencil Drawing', 'Pixel Art', 'Oil Painting',
+  'Comic Book Style', 'Acrylic Painting', 'Vector Art', 'Chalk Drawing', 'Crayon Drawing'
+];
+
 const COLOR_OPTIONS = [
   { value: '#F2FCE2', label: 'Soft Green' },
   { value: '#FEF7CD', label: 'Soft Yellow' },
@@ -53,7 +59,7 @@ const CharacterDetails = ({
   formData,
   onUpdateField
 }: CharacterDetailsProps) => {
-  const { characterType, theme, background, backgroundColor, action, advancedMode } = formData;
+  const { characterType, theme, background, backgroundColor, action, advancedMode, medium } = formData;
 
   return (
     <>
@@ -148,31 +154,83 @@ const CharacterDetails = ({
         </>
       )}
 
-      <div className="space-y-2 animate-fade-up" style={{ animationDelay: '350ms' }}>
-        <label htmlFor="background" className="block text-sm font-medium text-foreground/80">
-          Background
-        </label>
-        <Select
-          value={background}
-          onValueChange={(value) => {
-            onUpdateField("background", value as Background);
-            if (value !== 'Solid Color') {
-              onUpdateField("backgroundColor", "");
-            }
-          }}
-        >
-          <SelectTrigger id="background" className="w-full h-12 rounded-xl">
-            <SelectValue placeholder="Select Background" />
-          </SelectTrigger>
-          <SelectContent className="dropdown-fancy">
-            {BACKGROUNDS.map((bgOpt) => (
-              <SelectItem key={bgOpt} value={bgOpt} className="cursor-pointer">
-                {bgOpt}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      {/* Background and Medium in a 2-column layout for advanced mode */}
+      {advancedMode ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-up" style={{ animationDelay: '350ms' }}>
+          <div className="space-y-2">
+            <label htmlFor="background" className="block text-sm font-medium text-foreground/80">
+              Background
+            </label>
+            <Select
+              value={background}
+              onValueChange={(value) => {
+                onUpdateField("background", value as Background);
+                if (value !== 'Solid Color') {
+                  onUpdateField("backgroundColor", "");
+                }
+              }}
+            >
+              <SelectTrigger id="background" className="w-full h-12 rounded-xl">
+                <SelectValue placeholder="Select Background" />
+              </SelectTrigger>
+              <SelectContent className="dropdown-fancy">
+                {BACKGROUNDS.map((bgOpt) => (
+                  <SelectItem key={bgOpt} value={bgOpt} className="cursor-pointer">
+                    {bgOpt}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <label htmlFor="medium" className="block text-sm font-medium text-foreground/80">
+              Medium
+            </label>
+            <Select
+              value={medium || ""}
+              onValueChange={(value) => onUpdateField("medium", value as Medium)}
+            >
+              <SelectTrigger id="medium" className="w-full h-12 rounded-xl">
+                <SelectValue placeholder="Select Medium" />
+              </SelectTrigger>
+              <SelectContent className="dropdown-fancy">
+                {MEDIUM_OPTIONS.map((mediumOpt) => (
+                  <SelectItem key={mediumOpt} value={mediumOpt} className="cursor-pointer">
+                    {mediumOpt}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-2 animate-fade-up" style={{ animationDelay: '350ms' }}>
+          <label htmlFor="background" className="block text-sm font-medium text-foreground/80">
+            Background
+          </label>
+          <Select
+            value={background}
+            onValueChange={(value) => {
+              onUpdateField("background", value as Background);
+              if (value !== 'Solid Color') {
+                onUpdateField("backgroundColor", "");
+              }
+            }}
+          >
+            <SelectTrigger id="background" className="w-full h-12 rounded-xl">
+              <SelectValue placeholder="Select Background" />
+            </SelectTrigger>
+            <SelectContent className="dropdown-fancy">
+              {BACKGROUNDS.map((bgOpt) => (
+                <SelectItem key={bgOpt} value={bgOpt} className="cursor-pointer">
+                  {bgOpt}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
       {background === 'Solid Color' && (
         <div className="space-y-2 animate-fade-up" style={{ animationDelay: '375ms' }}>
