@@ -1,6 +1,6 @@
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArtStyle, AdvancedArtStyle } from "@/types";
+import { ArtStyle, AdvancedArtStyle, ArtistInfo } from "@/types";
 import { useEffect, useState } from "react";
 import { getArtistsByCategory } from "@/data/artistsData";
 import { getAllArtStyleCategories } from "@/data/artStyleDescriptions";
@@ -39,7 +39,7 @@ const ArtStyleSelector = ({
   onUpdateMedium
 }: ArtStyleSelectorProps) => {
   const allArtStyleCategories = getAllArtStyleCategories();
-  const [artistOptions, setArtistOptions] = useState<Array<{artistName: string, knownFor: string, artStyle: string, description: string}>>([]);
+  const [artistOptions, setArtistOptions] = useState<ArtistInfo[]>([]);
   
   useEffect(() => {
     if (advancedArtStyle) {
