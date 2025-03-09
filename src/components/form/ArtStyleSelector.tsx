@@ -51,19 +51,23 @@ const ArtStyleSelector = ({
         // Get normalized category name
         const normalizedCategory = normalizeCategory(advancedArtStyle);
         
+        console.log("Selected advanced art style:", advancedArtStyle);
+        console.log("Normalized category:", normalizedCategory);
+        
+        // Get all available categories from ARTISTS_DATA for debugging
+        const availableCategories = [...new Set(ARTISTS_DATA.map(a => a.category))];
+        console.log("Available categories in ARTISTS_DATA:", availableCategories.join(", "));
+        
         // Get artists directly from ARTISTS_DATA
         const filteredArtists = ARTISTS_DATA.filter(artist => 
           artist.category === normalizedCategory
         );
         
-        console.log("Selected advanced art style:", advancedArtStyle);
-        console.log("Normalized category:", normalizedCategory);
         console.log(`Found ${filteredArtists.length} artists for category ${normalizedCategory}`);
         
-        // Add explicit check for category mapping issues
+        // If no artists found, try to list some sample artists from the given JSON
         if (filteredArtists.length === 0) {
-          console.log("ARTISTS_DATA categories available:", 
-            [...new Set(ARTISTS_DATA.map(a => a.category))].join(", "));
+          console.log("No artists found in ARTISTS_DATA. This category may need to be added.");
         }
         
         setArtistOptions(filteredArtists);
