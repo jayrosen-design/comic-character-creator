@@ -13,6 +13,7 @@ const ArtStyleDescription = ({ style, className }: ArtStyleDescriptionProps) => 
   const description = getArtStyleDescription(style);
   
   if (!description) {
+    console.log(`No description found for style: ${style}`);
     return null;
   }
   

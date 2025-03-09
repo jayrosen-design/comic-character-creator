@@ -1,3 +1,4 @@
+
 import { 
   ArtStyle, 
   CharacterType, 
@@ -16,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { getAdvancedArtStyleCategories, getArtistsByCategory } from "@/data/artistsData";
+import { useEffect } from "react";
 
 const ART_STYLES: ArtStyle[] = [
   'Classic Comic', 'Manga', 'Modern Cartoon', 'Superhero', 'Animated',
@@ -46,8 +48,6 @@ const MEDIUMS: Medium[] = [
   'Pencil Sketch', 'Ink Drawing', '2-Tone', '3-Tone', 'Watercolor Wash',
   'Digital Painting', 'Marker Rendering', 'Charcoal Drawing', 'Pastel', 'Mixed Media'
 ];
-
-const ADVANCED_ART_STYLES: AdvancedArtStyle[] = getAdvancedArtStyleCategories();
 
 const COLOR_OPTIONS = [
   { value: '#F2FCE2', label: 'Soft Green' },
@@ -80,6 +80,17 @@ const CharacterForm = ({
   isLoading,
   className
 }: CharacterFormProps) => {
+  const advancedArtStyles = getAdvancedArtStyleCategories();
+  
+  useEffect(() => {
+    // Log to debug
+    console.log("Advanced art style categories:", advancedArtStyles);
+    if (formData.advancedArtStyle) {
+      const artists = getArtistsByCategory(formData.advancedArtStyle as AdvancedArtStyle);
+      console.log("Artists for selected category:", artists);
+    }
+  }, [formData.advancedArtStyle]);
+
   const getArtistOptions = () => {
     if (!formData.advancedArtStyle) return [];
     return getArtistsByCategory(formData.advancedArtStyle as AdvancedArtStyle);
@@ -142,8 +153,8 @@ const CharacterForm = ({
               <SelectTrigger id="advancedArtStyle" className="w-full h-12 rounded-xl">
                 <SelectValue placeholder="Select Advanced Art Style" />
               </SelectTrigger>
-              <SelectContent className="dropdown-fancy">
-                {ADVANCED_ART_STYLES.map((style) => (
+              <SelectContent className="dropdown-fancy max-h-[300px]">
+                {advancedArtStyles.map((style) => (
                   <SelectItem key={style} value={style} className="cursor-pointer">
                     {style}
                   </SelectItem>
@@ -166,7 +177,7 @@ const CharacterForm = ({
               <SelectTrigger id="artistName" className="w-full h-12 rounded-xl">
                 <SelectValue placeholder={!formData.advancedArtStyle ? "Select Art Style first" : "Select Artist"} />
               </SelectTrigger>
-              <SelectContent className="dropdown-fancy">
+              <SelectContent className="dropdown-fancy max-h-[300px]">
                 {getArtistOptions().map((artist) => (
                   <SelectItem key={artist.artistName} value={artist.artistName} className="cursor-pointer">
                     {artist.artistName}

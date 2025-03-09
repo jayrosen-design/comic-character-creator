@@ -1,3 +1,4 @@
+
 export type ArtStyle = 
   | 'Classic Comic'
   | 'Manga'
@@ -15,19 +16,20 @@ export type AdvancedArtStyle =
   | 'Comic Book Artists'
   | 'Cartoonists'
   | 'Cartoon TV Show Artists'
+  | 'Anime'
   | 'Manga Artists'
   | 'Chibi Artists'
   | 'Digital Artists'
-  | 'Digital Illustrators'
-  | 'Vintage Comic Book Artists'
-  | 'Modern Cartoon Artists'
-  | 'Ukiyo-e Artists'
-  | 'Graphic Novel Artists'
-  | 'Cel-Shaded Artists'
-  | 'Sci-Fi Illustrators'
-  | 'Videogame Artist Illustrators'
-  | 'Cartoonists Pre-1950'
-  | 'Art Nouveau Illustrators';
+  | 'Digital Art Illustration'
+  | 'Vintage Comic'
+  | 'Modern Comic'
+  | 'Ukiyo-e'
+  | 'Graphic Novel'
+  | 'Cel-Shaded Artist'
+  | 'Sci-Fi Illustrations'
+  | 'Videogame Artists'
+  | 'Pre-1950 Cartoonists'
+  | 'Art Nouveau';
 
 export type Medium = 
   | 'Pencil Sketch'
