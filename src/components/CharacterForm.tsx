@@ -62,8 +62,15 @@ const CharacterForm = ({
           </div>
         ) : (
           <ArtStyleSelector
+            advancedMode={formData.advancedMode}
             artStyle={formData.artStyle}
-            onValueChange={(value) => onUpdateField("artStyle", value)}
+            advancedArtStyle={formData.advancedArtStyle || ""}
+            artistName={formData.artistName || ""}
+            medium={formData.medium || ""}
+            onUpdateArtStyle={(value) => onUpdateField("artStyle", value)}
+            onUpdateAdvancedArtStyle={(value) => onUpdateField("advancedArtStyle", value)}
+            onUpdateArtistName={(value) => onUpdateField("artistName", value)}
+            onUpdateMedium={(value) => onUpdateField("medium", value)}
           />
         )}
       </div>
