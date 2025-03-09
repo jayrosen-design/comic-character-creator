@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, Download } from "lucide-react";
@@ -5,8 +6,8 @@ import { cn } from "@/lib/utils";
 import { ArtStyle, AdvancedArtStyle } from "@/types";
 import ArtStyleFunFact from "./ArtStyleFunFact";
 import ArtistInfoPanel from "./ArtistInfoPanel";
-import ArtistExampleImage from "./ArtistExampleImage";
 import ArtStyleDescription from "@/components/ArtStyleDescription";
+import ArtistExampleImagesGrid from "./ArtistExampleImagesGrid";
 
 interface ImageDisplayProps {
   imageUrl: string | null;
@@ -72,7 +73,7 @@ const ImageDisplay = ({
         />
       )}
       
-      {advancedMode && advancedArtStyle && artistName && (
+      {advancedMode && advancedArtStyle && artistName && showArtistInfo && (
         <ArtistInfoPanel
           category={advancedArtStyle}
           artistName={artistName}
@@ -81,15 +82,10 @@ const ImageDisplay = ({
       )}
 
       {shouldShowArtistInfo && (
-        <div className="mb-6 grid gap-6 md:grid-cols-2 animate-fade-up" style={{ animationDelay: '150ms' }}>
-          <ArtistInfoPanel 
-            category={advancedArtStyle as AdvancedArtStyle} 
+        <div className="mb-6 animate-fade-up" style={{ animationDelay: '150ms' }}>
+          <h4 className="text-sm font-medium text-muted-foreground mb-3">Examples of {artistName}'s Style</h4>
+          <ArtistExampleImagesGrid 
             artistName={artistName}
-            className="h-full"
-          />
-          <ArtistExampleImage 
-            artistName={artistName}
-            className="h-full"
           />
         </div>
       )}
