@@ -53,51 +53,100 @@ const CharacterDetails = ({
   formData,
   onUpdateField
 }: CharacterDetailsProps) => {
-  const { characterType, theme, background, backgroundColor, action } = formData;
+  const { characterType, theme, background, backgroundColor, action, advancedMode } = formData;
 
   return (
     <>
-      <div className="space-y-2 animate-fade-up" style={{ animationDelay: '250ms' }}>
-        <label htmlFor="characterType" className="block text-sm font-medium text-foreground/80">
-          Character Type
-        </label>
-        <Select
-          value={characterType}
-          onValueChange={(value) => onUpdateField("characterType", value as CharacterType)}
-        >
-          <SelectTrigger id="characterType" className="w-full h-12 rounded-xl">
-            <SelectValue placeholder="Select Character Type" />
-          </SelectTrigger>
-          <SelectContent className="dropdown-fancy">
-            {CHARACTER_TYPES.map((type) => (
-              <SelectItem key={type} value={type} className="cursor-pointer">
-                {type}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      {/* Character Type and Theme in a 2-column layout for advanced mode */}
+      {advancedMode ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-up" style={{ animationDelay: '250ms' }}>
+          <div className="space-y-2">
+            <label htmlFor="characterType" className="block text-sm font-medium text-foreground/80">
+              Character Type
+            </label>
+            <Select
+              value={characterType}
+              onValueChange={(value) => onUpdateField("characterType", value as CharacterType)}
+            >
+              <SelectTrigger id="characterType" className="w-full h-12 rounded-xl">
+                <SelectValue placeholder="Select Character Type" />
+              </SelectTrigger>
+              <SelectContent className="dropdown-fancy">
+                {CHARACTER_TYPES.map((type) => (
+                  <SelectItem key={type} value={type} className="cursor-pointer">
+                    {type}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-      <div className="space-y-2 animate-fade-up" style={{ animationDelay: '300ms' }}>
-        <label htmlFor="theme" className="block text-sm font-medium text-foreground/80">
-          Theme
-        </label>
-        <Select
-          value={theme}
-          onValueChange={(value) => onUpdateField("theme", value as Theme)}
-        >
-          <SelectTrigger id="theme" className="w-full h-12 rounded-xl">
-            <SelectValue placeholder="Select Theme" />
-          </SelectTrigger>
-          <SelectContent className="dropdown-fancy">
-            {THEMES.map((themeOpt) => (
-              <SelectItem key={themeOpt} value={themeOpt} className="cursor-pointer">
-                {themeOpt}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+          <div className="space-y-2">
+            <label htmlFor="theme" className="block text-sm font-medium text-foreground/80">
+              Theme
+            </label>
+            <Select
+              value={theme}
+              onValueChange={(value) => onUpdateField("theme", value as Theme)}
+            >
+              <SelectTrigger id="theme" className="w-full h-12 rounded-xl">
+                <SelectValue placeholder="Select Theme" />
+              </SelectTrigger>
+              <SelectContent className="dropdown-fancy">
+                {THEMES.map((themeOpt) => (
+                  <SelectItem key={themeOpt} value={themeOpt} className="cursor-pointer">
+                    {themeOpt}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="space-y-2 animate-fade-up" style={{ animationDelay: '250ms' }}>
+            <label htmlFor="characterType" className="block text-sm font-medium text-foreground/80">
+              Character Type
+            </label>
+            <Select
+              value={characterType}
+              onValueChange={(value) => onUpdateField("characterType", value as CharacterType)}
+            >
+              <SelectTrigger id="characterType" className="w-full h-12 rounded-xl">
+                <SelectValue placeholder="Select Character Type" />
+              </SelectTrigger>
+              <SelectContent className="dropdown-fancy">
+                {CHARACTER_TYPES.map((type) => (
+                  <SelectItem key={type} value={type} className="cursor-pointer">
+                    {type}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2 animate-fade-up" style={{ animationDelay: '300ms' }}>
+            <label htmlFor="theme" className="block text-sm font-medium text-foreground/80">
+              Theme
+            </label>
+            <Select
+              value={theme}
+              onValueChange={(value) => onUpdateField("theme", value as Theme)}
+            >
+              <SelectTrigger id="theme" className="w-full h-12 rounded-xl">
+                <SelectValue placeholder="Select Theme" />
+              </SelectTrigger>
+              <SelectContent className="dropdown-fancy">
+                {THEMES.map((themeOpt) => (
+                  <SelectItem key={themeOpt} value={themeOpt} className="cursor-pointer">
+                    {themeOpt}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </>
+      )}
 
       <div className="space-y-2 animate-fade-up" style={{ animationDelay: '350ms' }}>
         <label htmlFor="background" className="block text-sm font-medium text-foreground/80">
