@@ -6,6 +6,7 @@ import CharacterForm from "@/components/CharacterForm";
 import ImageDisplay from "@/components/ImageDisplay";
 import Gallery from "@/components/Gallery";
 import useCharacterGenerator from "@/hooks/useCharacterGenerator";
+import AdvancedModeInstructions from "@/components/AdvancedModeInstructions";
 
 const Index = () => {
   const {
@@ -79,8 +80,8 @@ const Index = () => {
 
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="space-y-12">
-          {/* Two column layout for advanced mode with artist info */}
-          {shouldShowArtistInfo ? (
+          {/* Two column layout for advanced mode */}
+          {formData.advancedMode ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-up" style={{ animationDelay: '200ms' }}>
               {/* Design Your Character column */}
               <section className="glass-card p-6 md:p-8">
@@ -96,15 +97,19 @@ const Index = () => {
               {/* Artist Example column */}
               <section>
                 <h2 className="text-xl font-semibold mb-6 text-center">Artist Example</h2>
-                <ImageDisplay
-                  imageUrl={null}
-                  advancedMode={formData.advancedMode}
-                  advancedArtStyle={formData.advancedArtStyle}
-                  artistName={formData.artistName}
-                  onRegenerate={resetImage}
-                  isLoading={false}
-                  showArtistInfo={true}
-                />
+                {shouldShowArtistInfo ? (
+                  <ImageDisplay
+                    imageUrl={null}
+                    advancedMode={formData.advancedMode}
+                    advancedArtStyle={formData.advancedArtStyle}
+                    artistName={formData.artistName}
+                    onRegenerate={resetImage}
+                    isLoading={false}
+                    showArtistInfo={true}
+                  />
+                ) : (
+                  <AdvancedModeInstructions />
+                )}
               </section>
             </div>
           ) : (
