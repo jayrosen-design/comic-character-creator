@@ -1,45 +1,38 @@
+/**
+ * This utility normalizes UI-friendly category names to match
+ * the exact category names used in the ARTISTS_DATA array
+ */
 
-import { AdvancedArtStyle } from "@/types";
+const CATEGORY_MAP: Record<string, string> = {
+  // Mapping UI display names to exact category names in ARTISTS_DATA
+  "Children's Book Illustrators": "Children's Book Illustrations",
+  "Comic Book Artists": "Comic Book Artists",
+  "Cartoonists": "Cartoonists",
+  "Cartoon TV Show Artists": "Cartoon TV Shows",
+  "Chibi Artists": "Chibi",
+  "Digital Art Illustrators": "Digital Art Illustration", 
+  "Digital Artists": "Digital Art",
+  "Manga Artists": "Manga",
+  "Anime Artists": "Anime",
+  "Videogame Artists": "Videogame Artists",
+  "Modern Comic Artists": "Modern Comic",
+  "Vintage Comic Artists": "Vintage Comic",
+  "Cel-Shaded Artists": "Cel-Shaded Artist",
+  "Art Nouveau Artists": "Art Nouveau",
+  "Graphic Novel Artists": "Graphic Novel",
+  "Sci-Fi Illustrators": "Sci-Fi Illustrations",
+  "Ukiyo-e Artists": "Ukiyo‐e",
+  "Pre-1950 Cartoonists": "Pre-1950 Cartoonists"
+};
 
-export function normalizeCategory(category: string): string {
-  // Handle special cases where the UI name might differ from the data structure name
-  const mappings: Record<string, string> = {
-    // Map UI display names to the exact category names used in artistsData.ts
-    "Children's Book Illustrators": "Children's Book Illustrations",
-    "Cartoonists": "Cartoonists",
-    "Comic Book Artists": "Comic Book Artists", 
-    "Cartoon TV Show Artists": "Cartoon TV Shows",
-    "Anime Artists": "Anime",
-    "Anime": "Anime",
-    "Manga Artists": "Manga",
-    "Manga": "Manga",
-    "Chibi Artists": "Chibi",
-    "Chibi": "Chibi",
-    "Digital Artists": "Digital Art",
-    "Digital Art": "Digital Art",
-    "Digital Art Illustrators": "Digital Art Illustration",
-    "Digital Art Illustration": "Digital Art Illustration",
-    "Vintage Comic Artists": "Vintage Comic",
-    "Vintage Comic": "Vintage Comic",
-    "Modern Comic Artists": "Modern Comic",
-    "Modern Comic": "Modern Comic",
-    "Ukiyo-e Artists": "Ukiyo‐e",
-    "Ukiyo‐e": "Ukiyo‐e",
-    "Graphic Novel Artists": "Graphic Novel",
-    "Graphic Novel": "Graphic Novel",
-    "Cel-Shaded Artists": "Cel-Shaded Artist",
-    "Cel-Shaded Artist": "Cel-Shaded Artist",
-    "Sci-Fi Illustrators": "Sci-Fi Illustrations",
-    "Sci-Fi Illustrations": "Sci-Fi Illustrations",
-    "Videogame Artists": "Videogame Artists",
-    "Pre-1950 Cartoonists": "Pre-1950 Cartoonists",
-    "Art Nouveau Artists": "Art Nouveau",
-    "Art Nouveau": "Art Nouveau"
-  };
+export const normalizeCategory = (category: string): string => {
+  console.log(`Normalizing category: "${category}" → "${CATEGORY_MAP[category] || category}"`);
   
-  // Check if we need normalization or if the category is already normalized
-  const normalized = mappings[category] || category;
+  // If there's a direct mapping, use it
+  if (CATEGORY_MAP[category]) {
+    return CATEGORY_MAP[category];
+  }
   
-  console.log(`Normalizing category: "${category}" → "${normalized}"`);
-  return normalized;
-}
+  // Otherwise, return the category as is
+  return category;
+};

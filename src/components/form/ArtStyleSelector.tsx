@@ -52,15 +52,21 @@ const ArtStyleSelector = ({
         const normalizedCategory = normalizeCategory(advancedArtStyle);
         
         // Get artists directly from ARTISTS_DATA
-        const artists = ARTISTS_DATA.filter(artist => 
+        const filteredArtists = ARTISTS_DATA.filter(artist => 
           artist.category === normalizedCategory
         );
         
         console.log("Selected advanced art style:", advancedArtStyle);
         console.log("Normalized category:", normalizedCategory);
-        console.log(`Found ${artists.length} artists for category ${normalizedCategory}`);
+        console.log(`Found ${filteredArtists.length} artists for category ${normalizedCategory}`);
         
-        setArtistOptions(artists);
+        // Add explicit check for category mapping issues
+        if (filteredArtists.length === 0) {
+          console.log("ARTISTS_DATA categories available:", 
+            [...new Set(ARTISTS_DATA.map(a => a.category))].join(", "));
+        }
+        
+        setArtistOptions(filteredArtists);
       } catch (error) {
         console.error("Error loading artists:", error);
         setArtistOptions([]);
