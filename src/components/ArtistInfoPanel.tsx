@@ -13,7 +13,15 @@ interface ArtistInfoPanelProps {
 
 const ArtistInfoPanel = ({ category, artistName, className }: ArtistInfoPanelProps) => {
   const normalizedCategory = normalizeCategory(category);
-  const artistInfo = getArtistInfo(normalizedCategory as AdvancedArtStyle, artistName);
+  
+  // Safely attempt to get artist info, return null if there's an error
+  let artistInfo;
+  try {
+    artistInfo = getArtistInfo(normalizedCategory as AdvancedArtStyle, artistName);
+  } catch (error) {
+    console.error("Error fetching artist info:", error);
+    return null;
+  }
   
   if (!artistInfo) {
     return null;
