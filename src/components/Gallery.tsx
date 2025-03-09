@@ -35,7 +35,7 @@ const Gallery = ({ images, onRemix, onDelete, className }: GalleryProps) => {
   const formatSettingsCaption = (settings: CharacterFormData) => {
     // Check if the image was created in advanced mode
     if (settings.advancedMode && settings.advancedArtStyle && settings.artistName) {
-      return `${settings.advancedArtStyle} style of artist ${settings.artistName}, ${settings.characterType} in ${settings.theme}, ${settings.background}, ${settings.action}`;
+      return `${settings.advancedArtStyle} in the style of artist ${settings.artistName}, ${settings.characterType} in ${settings.theme}, ${settings.background}, ${settings.action}`;
     }
     
     // Regular mode caption
