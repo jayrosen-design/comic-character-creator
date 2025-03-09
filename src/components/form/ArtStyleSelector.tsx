@@ -47,19 +47,25 @@ const ArtStyleSelector = ({
     if (advancedArtStyle) {
       setIsLoadingArtists(true);
       
-      // Get normalized category name
-      const normalizedCategory = normalizeCategory(advancedArtStyle);
-      
-      // Get artists for the selected category
-      const artists = getArtistsByCategory(normalizedCategory as AdvancedArtStyle);
-      setArtistOptions(artists);
-      
-      console.log("Selected advanced art style:", advancedArtStyle);
-      console.log("Normalized category:", normalizedCategory);
-      console.log("Artists for selected category:", artists);
-      console.log(`Found ${artists.length} artists for category ${normalizedCategory}`);
-      
-      setIsLoadingArtists(false);
+      try {
+        // Get normalized category name
+        const normalizedCategory = normalizeCategory(advancedArtStyle);
+        
+        // Get artists for the selected category
+        const artists = getArtistsByCategory(normalizedCategory as AdvancedArtStyle);
+        
+        console.log("Selected advanced art style:", advancedArtStyle);
+        console.log("Normalized category:", normalizedCategory);
+        console.log("Artists for selected category:", artists);
+        console.log(`Found ${artists.length} artists for category ${normalizedCategory}`);
+        
+        setArtistOptions(artists);
+      } catch (error) {
+        console.error("Error loading artists:", error);
+        setArtistOptions([]);
+      } finally {
+        setIsLoadingArtists(false);
+      }
     } else {
       setArtistOptions([]);
     }
@@ -98,7 +104,7 @@ const ArtStyleSelector = ({
             onValueChange={(value) => {
               onUpdateAdvancedArtStyle(value as AdvancedArtStyle);
               onUpdateArtistName("");
-              setArtistOptions([]); // Clear artists when changing style
+              setArtistOptions([]);
             }}
           >
             <SelectTrigger id="advancedArtStyle" className="w-full h-12 rounded-xl">
@@ -123,7 +129,7 @@ const ArtStyleSelector = ({
           <Select
             value={artistName || ""}
             onValueChange={(value) => onUpdateArtistName(value)}
-            disabled={!advancedArtStyle || isLoadingArtists}
+            disabled={!advancedArtStyle || isLoadingArtists || artistOptions.length === 0}
           >
             <SelectTrigger id="artistName" className="w-full h-12 rounded-xl">
               <SelectValue 

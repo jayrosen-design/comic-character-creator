@@ -8,21 +8,25 @@ export function normalizeCategory(category: string): string {
     "Cartoonists": "Cartoonists",
     "Comic Book Artists": "Comic Book Artists", 
     "Cartoon TV Show Artists": "Cartoon TV Shows",
-    "Anime": "Anime",
+    "Anime Artists": "Anime",
     "Manga Artists": "Manga",
     "Chibi Artists": "Chibi",
     "Digital Artists": "Digital Art",
-    "Digital Art Illustration": "Digital Art Illustration",
-    "Vintage Comic": "Vintage Comic",
-    "Modern Comic": "Modern Comic",
-    "Ukiyo-e": "Ukiyo‐e",
-    "Graphic Novel": "Graphic Novel",
-    "Cel-Shaded Artist": "Cel-Shaded Artist",
-    "Sci-Fi Illustrations": "Sci-Fi Illustrations",
+    "Digital Art Illustrators": "Digital Art Illustration",
+    "Vintage Comic Artists": "Vintage Comic",
+    "Modern Comic Artists": "Modern Comic",
+    "Ukiyo-e Artists": "Ukiyo‐e",
+    "Graphic Novel Artists": "Graphic Novel",
+    "Cel-Shaded Artists": "Cel-Shaded Artist",
+    "Sci-Fi Illustrators": "Sci-Fi Illustrations",
     "Videogame Artists": "Videogame Artists",
     "Pre-1950 Cartoonists": "Pre-1950 Cartoonists",
-    "Art Nouveau": "Art Nouveau"
+    "Art Nouveau Artists": "Art Nouveau"
   };
   
-  return mappings[category] || category;
+  // Check if we need normalization or if the category is already normalized
+  const normalized = mappings[category] || category;
+  
+  console.log(`Normalizing category: "${category}" → "${normalized}"`);
+  return normalized;
 }
