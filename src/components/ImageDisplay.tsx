@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, Download } from "lucide-react";
@@ -7,6 +6,7 @@ import { ArtStyle, AdvancedArtStyle } from "@/types";
 import ArtStyleFunFact from "./ArtStyleFunFact";
 import ArtistInfoPanel from "./ArtistInfoPanel";
 import ArtistExampleImage from "./ArtistExampleImage";
+import ArtStyleDescription from "@/components/ArtStyleDescription";
 
 interface ImageDisplayProps {
   imageUrl: string | null;
@@ -35,7 +35,6 @@ const ImageDisplay = ({
 }: ImageDisplayProps) => {
   const [isImageLoading, setIsImageLoading] = useState(true);
 
-  // Reset loading state when imageUrl changes
   useEffect(() => {
     if (imageUrl) {
       setIsImageLoading(true);
@@ -57,7 +56,6 @@ const ImageDisplay = ({
     document.body.removeChild(link);
   };
 
-  // Check if we should show the artist info section
   const shouldShowArtistInfo = (advancedMode && advancedArtStyle && artistName) && 
     (showArtistInfo || (!isLoading && imageUrl));
 
@@ -67,6 +65,21 @@ const ImageDisplay = ({
 
   return (
     <div className={cn("w-full max-w-3xl mx-auto mt-8", className)}>
+      {advancedMode && advancedArtStyle && (
+        <ArtStyleDescription 
+          style={advancedArtStyle} 
+          className="mb-4"
+        />
+      )}
+      
+      {advancedMode && advancedArtStyle && artistName && (
+        <ArtistInfoPanel
+          category={advancedArtStyle}
+          artistName={artistName}
+          className="mb-4"
+        />
+      )}
+
       {shouldShowArtistInfo && (
         <div className="mb-6 grid gap-6 md:grid-cols-2 animate-fade-up" style={{ animationDelay: '150ms' }}>
           <ArtistInfoPanel 

@@ -1,4 +1,3 @@
-
 export type ArtStyle = 
   | 'Classic Comic'
   | 'Manga'
@@ -12,23 +11,23 @@ export type ArtStyle =
   | 'Minimalist';
 
 export type AdvancedArtStyle =
-  | 'Children\'s Book Illustrations'
+  | 'Children\'s Book Illustrators'
   | 'Comic Book Artists'
   | 'Cartoonists'
-  | 'Cartoon TV Shows'
-  | 'Anime'
-  | 'Manga'
-  | 'Chibi'
-  | 'Digital Art'
-  | 'Cel-Shaded Artist'
-  | 'Sci-Fi Illustrations'
-  | 'Videogame Artists'
-  | 'Pre-1950 Cartoonists'
-  | 'Art Nouveau'
-  | 'Ukiyo-e'
-  | 'Graphic Novel'
-  | 'Vintage Comic'
-  | 'Modern Comic';
+  | 'Cartoon TV Show Artists'
+  | 'Manga Artists'
+  | 'Chibi Artists'
+  | 'Digital Artists'
+  | 'Digital Illustrators'
+  | 'Vintage Comic Book Artists'
+  | 'Modern Cartoon Artists'
+  | 'Ukiyo-e Artists'
+  | 'Graphic Novel Artists'
+  | 'Cel-Shaded Artists'
+  | 'Sci-Fi Illustrators'
+  | 'Videogame Artist Illustrators'
+  | 'Cartoonists Pre-1950'
+  | 'Art Nouveau Illustrators';
 
 export type Medium = 
   | 'Pencil Sketch'
@@ -127,6 +126,11 @@ export interface ArtistInfo {
   category: AdvancedArtStyle;
   artistName: string;
   knownFor: string;
+  description: string;
+}
+
+export interface ArtStyleDescription {
+  style: AdvancedArtStyle;
   description: string;
 }
 
