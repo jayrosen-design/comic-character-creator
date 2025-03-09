@@ -1,5 +1,5 @@
 
-import { CharacterFormData } from "@/types";
+import { CharacterFormData, Medium } from "@/types";
 import FormHeader from "@/components/form/FormHeader";
 import ActionsSection from "@/components/form/ActionsSection";
 import CharacterDetails from "@/components/form/CharacterDetails";
@@ -70,7 +70,7 @@ const CharacterForm = ({
             onUpdateArtStyle={(value) => onUpdateField("artStyle", value)}
             onUpdateAdvancedArtStyle={(value) => onUpdateField("advancedArtStyle", value)}
             onUpdateArtistName={(value) => onUpdateField("artistName", value)}
-            onUpdateMedium={(value) => onUpdateField("medium", value)}
+            onUpdateMedium={(value) => onUpdateField("medium", value as Medium | "")}
           />
         )}
       </div>
