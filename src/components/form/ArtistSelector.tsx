@@ -1,4 +1,5 @@
 
+import React from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AdvancedArtStyle } from "@/types";
 
@@ -8,46 +9,46 @@ interface ArtistSelectorProps {
   onChange: (value: string) => void;
 }
 
+// Mock data for artists by category to avoid importing the problematic files
+const mockArtistData: Record<string, string[]> = {
+  "Children's Book Illustrations": ["Maurice Sendak", "Dr. Seuss", "Eric Carle", "Quentin Blake", "Beatrix Potter"],
+  "Comic Book Artists": ["Jack Kirby", "Steve Ditko", "Neal Adams", "Jim Lee", "Todd McFarlane"],
+  "Cartoonists": ["Charles Schulz", "Bill Watterson", "Gary Larson", "Matt Groening", "Al Capp"],
+  "Cartoon TV Shows": ["Genndy Tartakovsky", "Craig McCracken", "Bruce Timm", "Pendleton Ward", "Rebecca Sugar"],
+  "Anime": ["Hayao Miyazaki", "Makoto Shinkai", "Satoshi Kon", "Katsuhiro Otomo", "Leiji Matsumoto"],
+  "Manga": ["Osamu Tezuka", "Akira Toriyama", "Rumiko Takahashi", "Naoko Takeuchi", "CLAMP"],
+  "Chibi": ["Momoko Sakura", "CLAMP", "Akira Toriyama", "Naoko Takeuchi", "Eiichiro Oda"],
+  "Digital Art": ["Beeple", "Artgerm", "Greg Rutkowski", "Ross Tran", "Loish"],
+  "Digital Art Illustration": ["Artgerm", "Greg Rutkowski", "Ross Tran", "Loish", "Sakimichan"],
+  "Vintage Comic": ["Jack Kirby", "Steve Ditko", "Will Eisner", "Joe Shuster", "Curt Swan"],
+  "Modern Comic": ["Genndy Tartakovsky", "Craig McCracken", "Bruce Timm", "Pendleton Ward", "Rebecca Sugar"],
+  "Ukiyo-e": ["Katsushika Hokusai", "Utagawa Hiroshige", "Kitagawa Utamaro", "Tōshūsai Sharaku", "Suzuki Harunobu"],
+  "Graphic Novel": ["Art Spiegelman", "Marjane Satrapi", "Chris Ware", "Daniel Clowes", "Charles Burns"],
+  "Cel-Shaded Artist": ["Shigenori Soejima", "Tetsuya Nomura", "Akihiko Yoshida", "Kazuma Kaneko", "Katsuya Terada"],
+  "Sci-Fi Illustrations": ["Frank R. Paul", "Chesley Bonestell", "Virgil Finlay", "Chris Foss", "Moebius"],
+  "Videogame Artists": ["Yoshitaka Amano", "Yoji Shinkawa", "Tetsuya Nomura", "Akihiko Yoshida", "Kazuma Kaneko"],
+  "Pre-1950 Cartoonists": ["Winsor McCay", "George Herriman", "Rube Goldberg", "E.C. Segar", "Milton Caniff"],
+  "Art Nouveau": ["Alphonse Mucha", "Aubrey Beardsley", "Eugène Grasset", "Gustav Klimt", "Théophile Steinlen"]
+};
+
 const ArtistSelector = ({
   artistName,
   advancedArtStyle,
   onChange
 }: ArtistSelectorProps) => {
-  // Enhanced function to safely get artists by category
+  // Get artists from our mock data instead of the problematic import
   const getArtistsByCategorySafely = (style: AdvancedArtStyle | ""): string[] => {
-    // If no style selected, return empty array
     if (!style) return [];
     
-    try {
-      // Try multiple approaches to get the data
-      try {
-        const artistsModule = require('@/data/artistsByCategory');
-        if (typeof artistsModule.getArtistsByCategory === 'function') {
-          try {
-            const artists = artistsModule.getArtistsByCategory(style);
-            if (Array.isArray(artists)) {
-              return artists;
-            }
-          } catch (fnError) {
-            console.error("Error calling getArtistsByCategory:", fnError);
-          }
-        }
-      } catch (moduleError) {
-        console.error("Error importing artistsByCategory module:", moduleError);
-      }
-      
-      // If we get here, we couldn't get valid data, return empty array
-      return [];
-    } catch (error) {
-      console.error("Unexpected error in getArtistsByCategorySafely:", error);
-      return [];
-    }
+    // Use our mock data instead of trying to import the problematic file
+    return mockArtistData[style] || [];
   };
   
   const artists = getArtistsByCategorySafely(advancedArtStyle);
 
   // Validate the current artistName is still valid given the current style
   const isArtistValid = artists.includes(artistName);
+  
   // If the current artist isn't valid for this style, call onChange with empty string
   React.useEffect(() => {
     if (artistName && !isArtistValid && advancedArtStyle) {
