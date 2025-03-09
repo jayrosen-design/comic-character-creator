@@ -82,3 +82,8 @@ export const getArtStyleDescription = (style: string): string | undefined => {
   );
   return description?.description;
 };
+
+// Add a helper function to get all art style categories
+export const getAllArtStyleCategories = (): string[] => {
+  return ART_STYLE_DESCRIPTIONS.map(desc => desc.style);
+};

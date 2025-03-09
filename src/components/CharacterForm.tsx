@@ -1,4 +1,3 @@
-
 import { 
   ArtStyle, 
   CharacterType, 
@@ -17,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { getAdvancedArtStyleCategories, getArtistsByCategory } from "@/data/artistsData";
+import { getAllArtStyleCategories } from "@/data/artStyleDescriptions";
 import { useEffect } from "react";
 
 const ART_STYLES: ArtStyle[] = [
@@ -80,20 +80,26 @@ const CharacterForm = ({
   isLoading,
   className
 }: CharacterFormProps) => {
-  const advancedArtStyles = getAdvancedArtStyleCategories();
+  const advancedArtStylesFromArtistsData = getAdvancedArtStyleCategories();
+  const allArtStyleCategories = getAllArtStyleCategories();
   
   useEffect(() => {
-    // Log to debug
-    console.log("Advanced art style categories:", advancedArtStyles);
+    console.log("Advanced art style categories from artistsData:", advancedArtStylesFromArtistsData);
+    console.log("All art style categories from artStyleDescriptions:", allArtStyleCategories);
+    
     if (formData.advancedArtStyle) {
       const artists = getArtistsByCategory(formData.advancedArtStyle as AdvancedArtStyle);
       console.log("Artists for selected category:", artists);
+      console.log("Selected advanced art style:", formData.advancedArtStyle);
     }
   }, [formData.advancedArtStyle]);
 
   const getArtistOptions = () => {
     if (!formData.advancedArtStyle) return [];
-    return getArtistsByCategory(formData.advancedArtStyle as AdvancedArtStyle);
+    
+    const artists = getArtistsByCategory(formData.advancedArtStyle as AdvancedArtStyle);
+    console.log(`Found ${artists.length} artists for category ${formData.advancedArtStyle}`);
+    return artists;
   };
 
   const handleAdvancedModeToggle = (checked: boolean) => {
@@ -154,7 +160,7 @@ const CharacterForm = ({
                 <SelectValue placeholder="Select Advanced Art Style" />
               </SelectTrigger>
               <SelectContent className="dropdown-fancy max-h-[300px]">
-                {advancedArtStyles.map((style) => (
+                {allArtStyleCategories.map((style) => (
                   <SelectItem key={style} value={style} className="cursor-pointer">
                     {style}
                   </SelectItem>
