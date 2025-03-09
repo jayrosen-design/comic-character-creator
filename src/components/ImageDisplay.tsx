@@ -65,7 +65,7 @@ const ImageDisplay = ({
   }
 
   return (
-    <div className={cn("w-full max-w-3xl mx-auto mt-8", className)}>
+    <div className={cn("w-full mx-auto", className)}>
       {advancedMode && advancedArtStyle && (
         <ArtStyleDescription 
           style={advancedArtStyle} 
@@ -74,19 +74,19 @@ const ImageDisplay = ({
       )}
       
       {advancedMode && advancedArtStyle && artistName && showArtistInfo && (
-        <ArtistInfoPanel
-          category={advancedArtStyle}
-          artistName={artistName}
-          className="mb-4"
-        />
-      )}
-
-      {shouldShowArtistInfo && (
-        <div className="mb-6 animate-fade-up" style={{ animationDelay: '150ms' }}>
-          <h4 className="text-sm font-medium text-muted-foreground mb-3">Examples of {artistName}'s Style</h4>
-          <ArtistExampleImagesGrid 
+        <div className="glass-card p-4 md:p-6 mb-4 animate-fade-up" style={{ animationDelay: '150ms' }}>
+          <ArtistInfoPanel
+            category={advancedArtStyle}
             artistName={artistName}
+            className="mb-4"
           />
+          
+          <div className="mt-6 animate-fade-up" style={{ animationDelay: '250ms' }}>
+            <h4 className="text-sm font-medium text-muted-foreground mb-3">Examples of {artistName}'s Style</h4>
+            <ArtistExampleImagesGrid 
+              artistName={artistName}
+            />
+          </div>
         </div>
       )}
 
