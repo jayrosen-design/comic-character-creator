@@ -13,17 +13,23 @@ export type ArtStyle =
 
 export type AdvancedArtStyle =
   | 'Children\'s Book Illustrators'
+  | 'Children\'s Book Illustrations' // Added alternative name
   | 'Comic Book Artists'
   | 'Cartoonists'
   | 'Cartoon TV Show Artists'
+  | 'Cartoon TV Shows' // Added alternative name
   | 'Anime'
   | 'Manga Artists'
+  | 'Manga' // Added alternative name
   | 'Chibi Artists'
+  | 'Chibi' // Added alternative name
   | 'Digital Artists'
+  | 'Digital Art' // Added alternative name
   | 'Digital Art Illustration'
   | 'Vintage Comic'
   | 'Modern Comic'
   | 'Ukiyo-e'
+  | 'Ukiyo‐e' // Added alternative with different hyphen
   | 'Graphic Novel'
   | 'Cel-Shaded Artist'
   | 'Sci-Fi Illustrations'
@@ -125,7 +131,7 @@ export interface StoredImage {
 }
 
 export interface ArtistInfo {
-  category: AdvancedArtStyle;
+  category: string;
   artistName: string;
   knownFor: string;
   description: string;

@@ -42,17 +42,48 @@ const ArtStyleSelector = ({
   const [artistOptions, setArtistOptions] = useState<ArtistInfo[]>([]);
   const [isLoadingArtists, setIsLoadingArtists] = useState<boolean>(false);
   
+  // Function to normalize category names to match data structure
+  const normalizeCategory = (category: string): string => {
+    // Handle special cases where the UI name might differ from the data structure name
+    const mappings: Record<string, string> = {
+      "Children's Book Illustrators": "Children's Book Illustrations",
+      "Cartoonists": "Cartoonists",
+      "Comic Book Artists": "Comic Book Artists",
+      "Cartoon TV Show Artists": "Cartoon TV Shows",
+      "Anime": "Anime",
+      "Manga Artists": "Manga",
+      "Chibi Artists": "Chibi",
+      "Digital Artists": "Digital Art",
+      "Digital Art Illustration": "Digital Art Illustration", 
+      "Vintage Comic": "Vintage Comic",
+      "Modern Comic": "Modern Comic",
+      "Ukiyo-e": "Ukiyo‐e",
+      "Graphic Novel": "Graphic Novel",
+      "Cel-Shaded Artist": "Cel-Shaded Artist",
+      "Sci-Fi Illustrations": "Sci-Fi Illustrations",
+      "Videogame Artists": "Videogame Artists",
+      "Pre-1950 Cartoonists": "Pre-1950 Cartoonists",
+      "Art Nouveau": "Art Nouveau"
+    };
+    
+    return mappings[category] || category;
+  };
+  
   useEffect(() => {
     if (advancedArtStyle) {
       setIsLoadingArtists(true);
       
+      // Get normalized category name
+      const normalizedCategory = normalizeCategory(advancedArtStyle);
+      
       // Get artists for the selected category
-      const artists = getArtistsByCategory(advancedArtStyle as AdvancedArtStyle);
+      const artists = getArtistsByCategory(normalizedCategory as AdvancedArtStyle);
       setArtistOptions(artists);
       
       console.log("Selected advanced art style:", advancedArtStyle);
+      console.log("Normalized category:", normalizedCategory);
       console.log("Artists for selected category:", artists);
-      console.log(`Found ${artists.length} artists for category ${advancedArtStyle}`);
+      console.log(`Found ${artists.length} artists for category ${normalizedCategory}`);
       
       setIsLoadingArtists(false);
     } else {
