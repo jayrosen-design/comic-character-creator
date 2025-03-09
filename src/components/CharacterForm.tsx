@@ -1,10 +1,11 @@
 
-import { CharacterFormData, ArtStyle, CharacterType, Theme, Background, Action, Medium, AdvancedArtStyle } from "@/types";
-import { cn } from "@/lib/utils";
-import FormHeader from "./form/FormHeader";
-import ArtStyleSelector from "./form/ArtStyleSelector";
-import CharacterDetails from "./form/CharacterDetails";
-import ActionsSection from "./form/ActionsSection";
+import { CharacterFormData } from "@/types";
+import FormHeader from "@/components/form/FormHeader";
+import ActionsSection from "@/components/form/ActionsSection";
+import CharacterDetails from "@/components/form/CharacterDetails";
+import ArtStyleSelector from "@/components/form/ArtStyleSelector";
+import ArtistSelector from "@/components/form/ArtistSelector";
+import ArtStyleSelectorPart from "@/components/form/ArtStyleSelectorPart";
 
 interface CharacterFormProps {
   formData: CharacterFormData;
@@ -14,7 +15,6 @@ interface CharacterFormProps {
   ) => void;
   onSubmit: () => void;
   isLoading: boolean;
-  className?: string;
 }
 
 const CharacterForm = ({
@@ -22,50 +22,58 @@ const CharacterForm = ({
   onUpdateField,
   onSubmit,
   isLoading,
-  className
 }: CharacterFormProps) => {
-  const handleAdvancedModeToggle = (checked: boolean) => {
+  
+  const toggleAdvancedMode = (checked: boolean) => {
     onUpdateField("advancedMode", checked);
-    onUpdateField("artStyle", "");
-    onUpdateField("advancedArtStyle", "");
-    onUpdateField("artistName", "");
+    if (checked) {
+      // Reset basic art style when switching to advanced mode
+      onUpdateField("artStyle", "");
+    } else {
+      // Reset advanced fields when switching to basic mode
+      onUpdateField("advancedArtStyle", "");
+      onUpdateField("artistName", "");
+    }
   };
 
   return (
-    <div className={cn("w-full max-w-3xl mx-auto", className)}>
+    <div className="space-y-4">
       <FormHeader 
-        advancedMode={formData.advancedMode || false}
-        onToggleAdvancedMode={handleAdvancedModeToggle}
+        advancedMode={formData.advancedMode}
+        onToggleAdvancedMode={toggleAdvancedMode}
       />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ArtStyleSelector
-          advancedMode={formData.advancedMode || false}
-          artStyle={formData.artStyle}
-          advancedArtStyle={formData.advancedArtStyle || ""}
-          artistName={formData.artistName || ""}
-          medium={formData.medium || ""}
-          onUpdateArtStyle={(value) => onUpdateField("artStyle", value)}
-          onUpdateAdvancedArtStyle={(value) => onUpdateField("advancedArtStyle", value)}
-          onUpdateArtistName={(value) => onUpdateField("artistName", value)}
-          onUpdateMedium={(value) => onUpdateField("medium", value as Medium)}
-        />
-
-        <CharacterDetails
-          characterType={formData.characterType}
-          theme={formData.theme}
-          background={formData.background}
-          backgroundColor={formData.backgroundColor || ""}
-          action={formData.action}
-          onUpdateCharacterType={(value) => onUpdateField("characterType", value)}
-          onUpdateTheme={(value) => onUpdateField("theme", value)}
-          onUpdateBackground={(value) => onUpdateField("background", value)}
-          onUpdateBackgroundColor={(value) => onUpdateField("backgroundColor", value)}
-          onUpdateAction={(value) => onUpdateField("action", value)}
-        />
+      
+      <div className="mb-6">
+        {formData.advancedMode ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <ArtStyleSelectorPart
+              advancedArtStyle={formData.advancedArtStyle}
+              onChange={(value) => {
+                onUpdateField("advancedArtStyle", value);
+                // Reset artist name when changing art style
+                onUpdateField("artistName", "");
+              }}
+            />
+            <ArtistSelector
+              artistName={formData.artistName}
+              advancedArtStyle={formData.advancedArtStyle}
+              onChange={(value) => onUpdateField("artistName", value)}
+            />
+          </div>
+        ) : (
+          <ArtStyleSelector
+            artStyle={formData.artStyle}
+            onChange={(value) => onUpdateField("artStyle", value)}
+          />
+        )}
       </div>
-
-      <ActionsSection 
+      
+      <CharacterDetails
+        formData={formData}
+        onUpdateField={onUpdateField}
+      />
+      
+      <ActionsSection
         isLoading={isLoading}
         onSubmit={onSubmit}
       />
