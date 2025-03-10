@@ -36,7 +36,11 @@ const artStylesList: AdvancedArtStyle[] = [
   "Pre-1950 Cartoons"
 ];
 
-const AdvancedModeInstructions = () => {
+interface AdvancedModeInstructionsProps {
+  onArtStyleSelect: (style: AdvancedArtStyle) => void;
+}
+
+const AdvancedModeInstructions = ({ onArtStyleSelect }: AdvancedModeInstructionsProps) => {
   const [selectedArtStyle, setSelectedArtStyle] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   
@@ -48,6 +52,7 @@ const AdvancedModeInstructions = () => {
   const handleArtStyleClick = (style: string) => {
     setSelectedArtStyle(style);
     setIsModalOpen(true);
+    onArtStyleSelect(style as AdvancedArtStyle);
   };
 
   const closeModal = () => {
@@ -70,7 +75,7 @@ const AdvancedModeInstructions = () => {
       <h3 className="text-lg font-medium mb-4">Advanced Mode Instructions</h3>
       <p className="text-muted-foreground mb-6">
         Select an Art Style from the dropdown, and then select an artist to learn more about the genre and artist.
-        <span className="block mt-2 text-sm">Click on any art style below to see example images.</span>
+        <span className="block mt-2 text-sm">Click on any art style below to see example images and select it.</span>
       </p>
       
       <h4 className="text-md font-medium mb-3">Available Art Styles:</h4>

@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -27,7 +26,10 @@ const Index = () => {
     deleteCharacter,
   } = useCharacterGenerator();
 
-  // Show artist info whenever an artist is selected in advanced mode
+  const handleArtStyleSelect = (style: AdvancedArtStyle) => {
+    updateFormField("advancedArtStyle", style);
+  };
+
   const shouldShowArtistInfo = !!(formData.advancedMode && 
                                formData.advancedArtStyle && 
                                formData.artistName);
@@ -110,7 +112,7 @@ const Index = () => {
                     showArtistInfo={true}
                   />
                 ) : (
-                  <AdvancedModeInstructions />
+                  <AdvancedModeInstructions onArtStyleSelect={handleArtStyleSelect} />
                 )}
               </section>
             </div>
