@@ -82,10 +82,8 @@ const Index = () => {
 
       <main className="flex-1 container mx-auto px-4 py-8">
         <div className="space-y-12">
-          {/* Two column layout for advanced mode */}
           {formData.advancedMode ? (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 animate-fade-up" style={{ animationDelay: '200ms' }}>
-              {/* Design Your Character column */}
               <section className="glass-card p-6 md:p-8">
                 <h2 className="text-xl font-semibold mb-6 text-center">Design Your Character</h2>
                 <CharacterForm
@@ -96,7 +94,6 @@ const Index = () => {
                 />
               </section>
               
-              {/* Artist Example column */}
               <section>
                 {shouldShowArtistInfo && (
                   <h2 className="text-xl font-semibold mb-6 text-center">Artist Example</h2>
@@ -117,7 +114,6 @@ const Index = () => {
               </section>
             </div>
           ) : (
-            // Original single column layout for basic mode
             <section className="glass-card p-6 md:p-8 max-w-3xl mx-auto animate-fade-up" style={{ animationDelay: '200ms' }}>
               <h2 className="text-xl font-semibold mb-6 text-center">Design Your Character</h2>
               <CharacterForm
