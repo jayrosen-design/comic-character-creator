@@ -27,7 +27,7 @@ const Header = ({ apiKey, serpApiKey, imgbbApiKey, onApiKeyChange }: HeaderProps
           Comic Character Creator
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl animate-fade-up" style={{ animationDelay: '100ms' }}>
-          Design and generate unique comic book characters with advanced art style controls!
+          Create comic book characters based on famous artist styles with Dall-E & Flux.
         </p>
       </div>
     </header>
