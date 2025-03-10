@@ -96,7 +96,9 @@ const Index = () => {
               
               {/* Artist Example column */}
               <section>
-                <h2 className="text-xl font-semibold mb-6 text-center">Artist Example</h2>
+                {shouldShowArtistInfo && (
+                  <h2 className="text-xl font-semibold mb-6 text-center">Artist Example</h2>
+                )}
                 {shouldShowArtistInfo ? (
                   <ImageDisplay
                     imageUrl={null}
