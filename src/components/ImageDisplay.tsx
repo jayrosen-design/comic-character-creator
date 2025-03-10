@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, Download } from "lucide-react";
@@ -66,15 +65,15 @@ const ImageDisplay = ({
 
   return (
     <div className={cn("w-full mx-auto", className)}>
-      {advancedMode && advancedArtStyle && (
-        <ArtStyleDescription 
-          style={advancedArtStyle} 
-          className="mb-4"
-        />
-      )}
-      
       {advancedMode && advancedArtStyle && artistName && showArtistInfo && (
         <div className="glass-card p-4 md:p-6 mb-4 animate-fade-up" style={{ animationDelay: '150ms' }}>
+          {advancedArtStyle && (
+            <ArtStyleDescription 
+              style={advancedArtStyle} 
+              className="mb-4"
+            />
+          )}
+          
           <ArtistInfoPanel
             category={advancedArtStyle}
             artistName={artistName}
@@ -89,7 +88,7 @@ const ImageDisplay = ({
           </div>
         </div>
       )}
-
+      
       {(isLoading || imageUrl) && (
         <div className="relative bg-white/50 rounded-2xl overflow-hidden shadow-lg border border-white/60 animate-scale-in">
           {isLoading ? (
