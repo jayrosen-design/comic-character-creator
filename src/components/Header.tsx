@@ -1,5 +1,6 @@
 
 import ApiKeyModal from "@/components/ApiKeyModal";
+import ThemeToggle from "@/components/ThemeToggle";
 import { ApiKeyType } from "@/types";
 
 interface HeaderProps {
@@ -20,6 +21,7 @@ const Header = ({ apiKey, serpApiKey, imgbbApiKey, onApiKeyChange }: HeaderProps
             imgbbApiKey={imgbbApiKey}
             onChange={onApiKeyChange} 
           />
+          <ThemeToggle />
         </div>
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground mb-2 animate-fade-up">
           Comic Character Creator
