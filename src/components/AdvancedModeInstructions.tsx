@@ -1,25 +1,37 @@
+
 import React from "react";
 import { AdvancedArtStyle } from "@/types";
 
 const artStylesList: AdvancedArtStyle[] = [
-  "Children's Book Illustrations",
-  "Comic Book",
-  "Cartoon",
-  "Cartoon TV Shows",
-  "Anime",
-  "Manga",
-  "Chibi",
-  "Digital Art",
-  "Digital Art Illustration",
-  "Cel-Shaded",
-  "Sci-Fi Illustrations",
-  "Videogame Art",
-  "Pre-1950 Cartoons",
+  // Traditional art styles
   "Art Nouveau",
+  "Ukiyo‐e",
+  
+  // Comic and illustration styles
+  "Comic Book",
   "Vintage Comic",
   "Modern Comic",
-  "Ukiyo‐e",
-  "Graphic Novel"
+  "Graphic Novel",
+  "Manga",
+  
+  // Animation and cartoon styles
+  "Cartoon",
+  "Cartoon TV Shows",
+  "Anime", 
+  "Chibi",
+  "Cel-Shaded",
+  
+  // Book and illustration styles
+  "Children's Book Illustrations",
+  "Sci-Fi Illustrations",
+  
+  // Modern and digital styles
+  "Digital Art",
+  "Digital Art Illustration",
+  "Videogame Art",
+  
+  // Historical
+  "Pre-1950 Cartoons"
 ];
 
 const AdvancedModeInstructions = () => {
