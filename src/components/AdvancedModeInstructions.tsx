@@ -1,21 +1,20 @@
-
 import React from "react";
 import { AdvancedArtStyle } from "@/types";
 
 const artStylesList: AdvancedArtStyle[] = [
   "Children's Book Illustrations",
-  "Comic Book Artists",
-  "Cartoonists",
+  "Comic Book",
+  "Cartoon",
   "Cartoon TV Shows",
   "Anime",
   "Manga",
   "Chibi",
   "Digital Art",
   "Digital Art Illustration",
-  "Cel-Shaded Artist",
+  "Cel-Shaded",
   "Sci-Fi Illustrations",
-  "Videogame Artists",
-  "Pre-1950 Cartoonists",
+  "Videogame Art",
+  "Pre-1950 Cartoons",
   "Art Nouveau",
   "Vintage Comic",
   "Modern Comic",
